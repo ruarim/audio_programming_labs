@@ -159,16 +159,21 @@ void Tester1AudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         for(int channel = 0; channel < getTotalNumOutputChannels(); ++channel)
         {
             auto* channelData = buffer.getWritePointer(channel);
-            if(testSignal == 0)
-                channelData[sample] = 2.0 * gain * ((double)rand() / (RAND_MAX)) - 1.0;
-            else if(testSignal == 1)
-                channelData[sample] = gain * sinf(juce::MathConstants<float>::twoPi * inputPhase);
-            else if(testSignal == 2){
-                if(lfoPhase > 0.05 * lfoFreqValue) channelData[sample] = 0;
-                else
+            switch(testSignal){
+                case 0:
+                    channelData[sample] = 2.0 * gain * ((double)rand() / (RAND_MAX)) - 1.0;
+                    break;
+                case 1:
                     channelData[sample] = gain * sinf(juce::MathConstants<float>::twoPi * inputPhase);
+                    break;
+                case 2:
+                    if(lfoPhase > 0.05 * lfoFreqValue) channelData[sample] = 0;
+                    else
+                        channelData[sample] = gain * sinf(juce::MathConstants<float>::twoPi * inputPhase);
+                    break;
+                default:
+                    channelData[sample] = 0;
             }
-            else channelData[sample] = 0;
         }
         // MUTE CHANNEL LEFT OR RIGHT CHANNEL
         if(channelValue == 0) buffer.getWritePointer(1)[sample] = 0;
