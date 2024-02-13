@@ -222,14 +222,14 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
             float* delayData = delayBuffer.getWritePointer(j);
             float delayed = burst + delayData[delayReadPosition] * delayFeedback;
             
-            if(delayWritePosition == 0) delayData[0] = delayed;
-            else {
-                // filter delay line with first order IIR
-                float cutoff = filterCutoffParam->get();
-                float alpha = 1 / (1 + (sampleRate / (2.0f * juce::MathConstants<float>::pi * cutoff)));
-                float filtered = alpha * delayed + (1 - alpha) * (delayWritePosition > 0 ? delayData[delayWritePosition - 1] : delayed);
-                delayData[delayWritePosition] = filtered;
-            }
+            
+            // filter delay line with first order IIR
+            float cutoff = filterCutoffParam->get();
+            float alpha = 1 / (1 + (sampleRate / (2.0f * juce::MathConstants<float>::pi * cutoff)));
+            // this may be causing slight ramp at start of delay line
+            float filtered = alpha * delayed + (1 - alpha) * (delayWritePosition > 0 ? delayData[delayWritePosition - 1] : delayed);
+            delayData[delayWritePosition] = filtered;
+            
             
             float out = 0.0f; // sample output
             
