@@ -18,24 +18,31 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                       #endif
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true)
-                     #endif
+                     #endif 
                        )
 #endif
 {
     // use value tree ?
     // add preset saving - can this be done without value tree
+    addParameter(burstSignalParam = new juce::AudioParameterChoice("burstSignal", "Burst Signal", {"Noise", "Sine", "Square", "Triangle"}, 0));
     addParameter(pluckParam = new juce::AudioParameterBool("pluck", "Pluck string", 0));
     addParameter(delayTimeParam = new juce::AudioParameterFloat("delay", "Delay Time", 0.00, 0.020f, 0.010f));
     addParameter(delayFeedbackParam = new juce::AudioParameterFloat("feedback", "Decay", 0.8f, 0.99f, 0.90f));
     addParameter(widthParam = new juce::AudioParameterFloat("width", "Width", 0, 0.02f, 0.01f));
+    addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 1.0f, 5.0f, 1.0f));
+    addParameter(burstGainParam = new juce::AudioParameterFloat("bustGain", "Burst Gain", 0.0f, 1.0f, 0.5f));
+    addParameter(freqParam = new juce::AudioParameterFloat("burstFreq", "Burst Freq", 20.0f, 20000.0f, 800.0f));
+    addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", 20.0f, 20000.0f, 8000.0f));
 }
 
 Karplus_strong_1AudioProcessor::~Karplus_strong_1AudioProcessor()
 {
 }
 
+//WHY DOES THIS NOT WORK?
 int Karplus_strong_1AudioProcessor::getDelayBufferReadPosition()
 {
+    //USE this->?
     int position = (int)(delayWritePosition - (delayTime * getSampleRate()) + delayBufferLength) % delayBufferLength;
     return position;
 }
@@ -156,45 +163,86 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     int numSamples = buffer.getNumSamples();
     double sampleRate = getSampleRate();
+    
 
-    //Params
-    float delayTime = delayTimeParam->get();
-    float delayFeedback = delayFeedbackParam->get();
-    float noiseWidth = widthParam->get();
+    //Params - getParams function
+    delayTime = delayTimeParam->get();
+    delayFeedback = delayFeedbackParam->get();
+    burstWidth = widthParam->get();
+    
     bool pluck = pluckParam->get();
     
-    
-    //Update buffer read positions
+    //Update buffer read positions - why wont this work in a function????
     delayReadPosition = (int)(delayWritePosition - (delayTime * sampleRate) + delayBufferLength) % delayBufferLength;
     //auto test = getDelayBufferReadPosition();
     
     if(pluck)
     {
         pluckParam->setValueNotifyingHost(0);
-        noiseGain = 1.0;
+        burstGain = burstGainParam->get();
     }
-
    
     for(int i = 0; i < numSamples; ++i)
     {
-        float in = 0.0;
-        if(noiseGain > 0.0) in = 2.0 * noiseGain * ((double)rand()/RAND_MAX-1.0);
+        float burst = 0.0;
+        
+        if(burstGain > 0.0)
+        {   burstFreq = freqParam->get();
+            phase += burstFreq / sampleRate;
+            if(phase >= 1.0) phase -= 1.0;
+            float sine = burstGain * sinf(juce::MathConstants<float>::twoPi * phase);
+            
+            burstSignal = burstSignalParam->getIndex();
+            switch(burstSignal){
+                case 0: // noise
+                    burst = 2.0 * burstGain * ((double)rand()/RAND_MAX-1.0);
+                    break;
+                case 1: // sine
+                    burst = sine;
+                    break;
+                case 2: // square
+                    burst = (sine >= 0) ? burstGain:-burstGain;
+                    break;
+                case 3: // triangle
+                    burst = 2.0f * std::abs(2.0f * (phase - std::floor(phase + 0.5f))) - 1.0f;
+                    burst *= burstGain;
+                    break;
+                case 4: // saw
+                    burst = 2.0f * (phase - std::floor(phase)) - 1;
+                    burst *= burstGain;
+                    break;
+            }
+        }
+        else phase = 0.0f; // reset phase every pluck
+            
         
         for(int j = 0; j < totalNumInputChannels; ++j)
         {
             //get delay data
             float* delayData = delayBuffer.getWritePointer(j);
+            float delayed = burst + delayData[delayReadPosition] * delayFeedback;
             
-            delayData[delayWritePosition] = in + delayData[delayReadPosition] * delayFeedback;
+            if(delayWritePosition == 0) delayData[0] = delayed;
+            else {
+                // filter delay line with first order IIR
+                float cutoff = filterCutoffParam->get();
+                float alpha = 1 / (1 + (sampleRate / (2.0f * juce::MathConstants<float>::pi * cutoff)));
+                float filtered = alpha * delayed + (1 - alpha) * (delayWritePosition > 0 ? delayData[delayWritePosition - 1] : delayed);
+                delayData[delayWritePosition] = filtered;
+            }
             
-            float out = 0.0f;
-            // only apply delay if > 0
-            if(delayTime > 0.0) out = in + delayData[delayReadPosition];
-            else out = in;
+            float out = 0.0f; // sample output
             
+            // only apply delay if time > 0
+            if(delayTime > 0.0) out = burst + delayData[delayReadPosition];
+            else out = burst;
+            
+            // saturation
+            drive = driveParam->get();
+            out = tanh(drive * out);
             buffer.getWritePointer(j)[i] = out;
         }
-        if(noiseGain >= 0.0) noiseGain = noiseGain - 1.0 /(noiseWidth*(float)sampleRate);
+        if(burstGain >= 0.0) burstGain = burstGain - 1.0 / (burstWidth * (float)sampleRate);
         if(++delayReadPosition >= delayBufferLength) delayReadPosition = 0;
         if(++delayWritePosition >= delayBufferLength) delayWritePosition = 0;
     }
@@ -237,6 +285,3 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new Karplus_strong_1AudioProcessor();
 }
-
-
-

@@ -59,12 +59,23 @@ private:
     juce::AudioParameterFloat* delayTimeParam;
     juce::AudioParameterFloat* delayFeedbackParam;
     juce::AudioParameterFloat* widthParam;
+    juce::AudioParameterFloat* burstGainParam;
+    juce::AudioParameterFloat* driveParam;
+    juce::AudioParameterChoice* burstSignalParam;
+    juce::AudioParameterFloat* freqParam;
+    juce::AudioParameterFloat* filterCutoffParam;
     
-    float noiseGain = 0.0f;
-    float noiseWidth= 0.0f;
+    float burstGain = 0.0f;
+    float burstWidth = 0.0f;
+    int burstSignal = 0;
+    float burstFreq = 0.0f;
+    float phase = 0.0f;
     
     float delayTime = 0.0f;
     float delayFeedback = 0.0f;
+    float drive = 0.0f;
+    
+    float filterCutoff = 0.0f;
     
     //Buffer
     juce::AudioSampleBuffer delayBuffer;
@@ -73,7 +84,7 @@ private:
     int delayWritePosition = 0;
     
     //Helpers - NOT WORKING?
-    int getDelayBufferReadPosition();
+    int getDelayBufferReadPosition(); //?????
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Karplus_strong_1AudioProcessor)
