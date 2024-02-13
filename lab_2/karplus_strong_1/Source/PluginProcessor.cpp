@@ -25,11 +25,11 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
     // use value tree ?
     // add preset saving - can this be done without value tree
     addParameter(burstSignalParam = new juce::AudioParameterChoice("burstSignal", "Burst Signal", {"Noise", "Sine", "Square", "Triangle"}, 0));
-    addParameter(pluckParam = new juce::AudioParameterBool("pluck", "Pluck string", 0));
+    addParameter(pluckParam = new juce::AudioParameterBool("pluck", "Pluck string - Press Spacebar", 0));
     addParameter(delayTimeParam = new juce::AudioParameterFloat("delay", "Delay Time", 0.00, 0.020f, 0.010f));
     addParameter(delayFeedbackParam = new juce::AudioParameterFloat("feedback", "Decay", 0.8f, 0.99f, 0.90f));
     addParameter(widthParam = new juce::AudioParameterFloat("width", "Width", 0, 0.02f, 0.01f));
-    addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 1.0f, 5.0f, 1.0f));
+    addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 0.5f, 5.0f, 1.0f));
     addParameter(burstGainParam = new juce::AudioParameterFloat("bustGain", "Burst Gain", 0.0f, 1.0f, 0.5f));
     addParameter(freqParam = new juce::AudioParameterFloat("burstFreq", "Burst Freq", 20.0f, 20000.0f, 800.0f));
     addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", 20.0f, 20000.0f, 8000.0f));
@@ -158,40 +158,50 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
 {
     juce::ScopedNoDenormals noDenormals;
     
-    //Buffer info
+    // Buffer info
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     int numSamples = buffer.getNumSamples();
     double sampleRate = getSampleRate();
     
 
-    //Params - getParams function
+    // Delay, burst, pluck params from gui
     delayTime = delayTimeParam->get();
     delayFeedback = delayFeedbackParam->get();
     burstWidth = widthParam->get();
     
+    // Pluck string from gui
     bool pluck = pluckParam->get();
+    // Pluck string on spacebar down - SHOULD
+    if(juce::KeyPress::isKeyCurrentlyDown(juce::KeyPress::spaceKey)) {
+        pluck = true;
+    }
     
-    //Update buffer read positions - why wont this work in a function????
+    // Update buffer read positions - why wont this work in a function????
     delayReadPosition = (int)(delayWritePosition - (delayTime * sampleRate) + delayBufferLength) % delayBufferLength;
     //auto test = getDelayBufferReadPosition();
     
+    // get burst gain - set pluck to false
     if(pluck)
     {
         pluckParam->setValueNotifyingHost(0);
         burstGain = burstGainParam->get();
     }
-   
+    
+    // loop through samples
     for(int i = 0; i < numSamples; ++i)
     {
+        // calculate burst signal for both channels
         float burst = 0.0;
-        
-        if(burstGain > 0.0)
-        {   burstFreq = freqParam->get();
-            phase += burstFreq / sampleRate;
-            if(phase >= 1.0) phase -= 1.0;
+        if(burstGain > 0.0) // only calculate burst gain above 0
+        {   burstFreq = freqParam->get(); // get burst frequency
+            phase += burstFreq / sampleRate; // calculate phase
+            if(phase >= 1.0) phase -= 1.0; // wrap phase
+            
+            // calculte sine
             float sine = burstGain * sinf(juce::MathConstants<float>::twoPi * phase);
             
+            // calcuated selected burst signal type
             burstSignal = burstSignalParam->getIndex();
             switch(burstSignal){
                 case 0: // noise
@@ -215,26 +225,29 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         }
         else phase = 0.0f; // reset phase every pluck
             
-        
+        // loop through channels
         for(int j = 0; j < totalNumInputChannels; ++j)
         {
             //get delay data
             float* delayData = delayBuffer.getWritePointer(j);
-            float delayed = burst + delayData[delayReadPosition] * delayFeedback;
             
+            // apply delay
+            float delayed = burst + delayData[delayReadPosition] * delayFeedback;
             
             // filter delay line with first order IIR
             float cutoff = filterCutoffParam->get();
+            
+            // alpha equation = 1 / 1 + (fs / 2 * pi * fc) - fs = sample rate fc = filter cutoff
             float alpha = 1 / (1 + (sampleRate / (2.0f * juce::MathConstants<float>::pi * cutoff)));
-            // this may be causing slight ramp at start of delay line
+            
+            // filter equation - y[n] = a * x[n] + (1 + a) * y[n-1]
+            // could use last index of buffer if position = 0 - since circular buffer?
             float filtered = alpha * delayed + (1 - alpha) * (delayWritePosition > 0 ? delayData[delayWritePosition - 1] : delayed);
-            delayData[delayWritePosition] = filtered;
+            delayData[delayWritePosition] = (delayed * 0.5) + (filtered * 0.5);
             
-            
-            float out = 0.0f; // sample output
-            
-            // only apply delay if time > 0
-            if(delayTime > 0.0) out = burst + delayData[delayReadPosition];
+            // write currrent output to buffer
+            float out = 0.0f; // sample output - should burst be added in again here
+            if(delayTime > 0.0) out = burst + delayData[delayReadPosition]; // only apply delay if time > 0
             else out = burst;
             
             // saturation
@@ -242,6 +255,7 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
             out = tanh(drive * out);
             buffer.getWritePointer(j)[i] = out;
         }
+        // (burstWidth * (float)sampleRate) - burst length?
         if(burstGain >= 0.0) burstGain = burstGain - 1.0 / (burstWidth * (float)sampleRate);
         if(++delayReadPosition >= delayBufferLength) delayReadPosition = 0;
         if(++delayWritePosition >= delayBufferLength) delayWritePosition = 0;
