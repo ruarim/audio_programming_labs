@@ -172,10 +172,13 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     
     // Pluck string from gui
     bool pluck = pluckParam->get();
-    // Pluck string on spacebar down - SHOULD
-    if(juce::KeyPress::isKeyCurrentlyDown(juce::KeyPress::spaceKey)) {
+    
+    // Pluck string on spacebar down
+    if(juce::KeyPress::isKeyCurrentlyDown(juce::KeyPress::spaceKey) && !burstOn) {
         pluck = true;
+        burstOn = true;
     }
+    else if(!juce::KeyPress::isKeyCurrentlyDown(juce::KeyPress::spaceKey)) burstOn = false;
     
     // Update buffer read positions - why wont this work in a function????
     delayReadPosition = (int)(delayWritePosition - (delayTime * sampleRate) + delayBufferLength) % delayBufferLength;
@@ -255,8 +258,12 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
             out = tanh(drive * out);
             buffer.getWritePointer(j)[i] = out;
         }
-        // (burstWidth * (float)sampleRate) - burst length?
-        if(burstGain >= 0.0) burstGain = burstGain - 1.0 / (burstWidth * (float)sampleRate);
+        
+        // length of burst in samples
+        int burstSamples = (burstWidth * (float)sampleRate);
+        
+        // gradually reduce burst gain over burst length in samples
+        if(burstGain >= 0.0) burstGain = burstGain - 1.0 / burstSamples;
         if(++delayReadPosition >= delayBufferLength) delayReadPosition = 0;
         if(++delayWritePosition >= delayBufferLength) delayWritePosition = 0;
     }
