@@ -87,8 +87,10 @@ private:
     int delayReadPosition = 0;
     int delayWritePosition = 0;
     
-    //Helpers - NOT WORKING?
+    // Helpers
     int getDelayBufferReadPosition();
+    
+    void spaceBarPluck(bool &pluck);
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Karplus_strong_1AudioProcessor)
