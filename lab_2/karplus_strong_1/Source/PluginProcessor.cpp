@@ -53,6 +53,26 @@ int Karplus_strong_1AudioProcessor::getDelayBufferReadPosition()
     return (int)(delayWritePosition - (delayTime * getSampleRate()) + delayBufferLength) % delayBufferLength;
 }
 
+float Karplus_strong_1AudioProcessor::calcBurstSignal(int choice, float phase, float gain)
+{
+    float sine = gain * sinf(juce::MathConstants<float>::twoPi * phase);
+    
+    switch(choice){
+        case 0: // noise
+            return 2.0 * gain * ((double)rand()/RAND_MAX-1.0);
+        case 1: // sine
+            return sine;
+        case 2: // square
+            return (sine >= 0) ? gain:-gain;
+        case 3: // triangle
+            return (2.0f * std::abs(2.0f * (phase - std::floor(phase + 0.5f))) - 1.0f) * gain;
+        case 4: // saw
+            return (2.0f * (phase - std::floor(phase)) - 1) * gain;
+        default:
+            return 0.0f;
+    }
+}
+
 //==============================================================================
 const juce::String Karplus_strong_1AudioProcessor::getName() const
 {
@@ -201,30 +221,10 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
             phase += burstFreq / sampleRate; // calculate phase
             if(phase >= 1.0) phase -= 1.0; // wrap phase
             
-            // calculte sine
-            float sine = burstGain * sinf(juce::MathConstants<float>::twoPi * phase);
-            
             // calcuated selected burst signal type
-            burstSignal = burstSignalParam->getIndex();
-            switch(burstSignal){
-                case 0: // noise
-                    burst = 2.0 * burstGain * ((double)rand()/RAND_MAX-1.0);
-                    break;
-                case 1: // sine
-                    burst = sine;
-                    break;
-                case 2: // square
-                    burst = (sine >= 0) ? burstGain:-burstGain;
-                    break;
-                case 3: // triangle
-                    burst = 2.0f * std::abs(2.0f * (phase - std::floor(phase + 0.5f))) - 1.0f;
-                    burst *= burstGain;
-                    break;
-                case 4: // saw
-                    burst = 2.0f * (phase - std::floor(phase)) - 1;
-                    burst *= burstGain;
-                    break;
-            }
+            burstChoice = burstSignalParam->getIndex();
+            // create signal
+            burst = calcBurstSignal(burstChoice, phase, burstGain);
         }
         else phase = 0.0f; // reset phase every pluck
             

@@ -69,7 +69,7 @@ private:
     bool burstOn = false;
     float burstGain = 0.0f;
     float burstWidth = 0.0f;
-    int burstSignal = 0;
+    int burstChoice = 0;
     float burstFreq = 0.0f;
     float phase = 0.0f;
     
@@ -89,7 +89,7 @@ private:
     
     // Helpers
     int getDelayBufferReadPosition();
-    
+    float calcBurstSignal(int choice, float phase, float gain);
     void spaceBarPluck(bool &pluck);
     
     //==============================================================================
