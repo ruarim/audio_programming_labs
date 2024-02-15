@@ -22,13 +22,16 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
                        )
 #endif
 {
-    // use value tree ?
-    // add preset saving - can this be done without value tree
+    // set precise ranges
+    auto delayRange = juce::NormalisableRange<float>(0.001f, 0.02f);
+    auto widthRange = juce::NormalisableRange<float>(0.001f, 0.02f);
+
+    // create parameters
     addParameter(burstSignalParam = new juce::AudioParameterChoice("burstSignal", "Burst Signal", {"Noise", "Sine", "Square", "Triangle"}, 0));
     addParameter(pluckParam = new juce::AudioParameterBool("pluck", "Pluck string - Press Spacebar", 0));
-    addParameter(delayTimeParam = new juce::AudioParameterFloat("delay", "Delay Time", 0.00f, 0.020f, 0.010f));
+    addParameter(delayTimeParam = new juce::AudioParameterFloat("delay", "Delay Time", delayRange, 0.01f));
     addParameter(delayFeedbackParam = new juce::AudioParameterFloat("feedback", "Decay", 0.80f, 0.999f, 0.90f));
-    addParameter(widthParam = new juce::AudioParameterFloat("width", "Width", 0, 0.02f, 0.01f));
+    addParameter(widthParam = new juce::AudioParameterFloat("width", "Width", widthRange, 0.01f));
     addParameter(burstGainParam = new juce::AudioParameterFloat("bustGain", "Burst Gain", 0.0f, 1.0f, 0.5f));
     addParameter(freqParam = new juce::AudioParameterFloat("burstFreq", "Burst Freq", 20.0f, 20000.0f, 800.0f));
     addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", 20.0f, 20000.0f, 8000.0f));
@@ -139,6 +142,8 @@ void Karplus_strong_1AudioProcessor::changeProgramName (int index, const juce::S
 void Karplus_strong_1AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     int inChannels = getTotalNumInputChannels();
+    
+    // init buffer
     delayTime = delayTimeParam->get();
     delayBufferLength = (int)(2.0 * sampleRate);
     delayBuffer.setSize(inChannels, delayBufferLength);
@@ -245,12 +250,12 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
             
             // first order IIR filter eq - y[n] = a * x[n] + (1 + a) * y[n-1]
             float filtered = alpha * delayed + (1 - alpha) * (delayWritePosition > 0 ? delayData[delayWritePosition - 1] : delayed);
+            
+            // avoid distortion
             delayData[delayWritePosition] = (delayed * 0.5) + (filtered * 0.5);
             
             // write currrent output to buffer
-            float out = 0.0f;
-            if(delayTime > 0.0) out = burst + delayData[delayReadPosition]; // only apply delay if time > 0
-            else out = burst;
+            float out = burst + delayData[delayReadPosition]; // only apply delay if time > 0
             
             // saturation
             drive = driveParam->get();

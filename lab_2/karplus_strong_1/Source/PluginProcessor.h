@@ -73,9 +73,11 @@ private:
     float burstFreq = 0.0f;
     float phase = 0.0f;
     
-    // Delay
+    // Delay - params
     float delayTime = 0.0f;
     float delayFeedback = 0.0f;
+    
+    // Drive
     float drive = 0.0f;
     
     // Filter
