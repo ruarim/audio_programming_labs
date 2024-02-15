@@ -57,7 +57,6 @@ public:
 private:
     // Params
     juce::AudioParameterBool* pluckParam;
-    juce::AudioParameterFloat* delayTimeParam;
     juce::AudioParameterFloat* delayFeedbackParam;
     juce::AudioParameterFloat* widthParam;
     juce::AudioParameterFloat* burstGainParam;
@@ -65,6 +64,12 @@ private:
     juce::AudioParameterChoice* burstSignalParam;
     juce::AudioParameterFloat* freqParam;
     juce::AudioParameterFloat* filterCutoffParam;
+    
+    // TEMP PARAM - USE MIDI
+    juce::AudioParameterFloat* notePitchParam;
+    
+    // Note pitch
+    float notePitch = 440.0f;
     
     // Burst
     bool burstOn = false;
@@ -91,6 +96,7 @@ private:
     int getDelayBufferReadPosition();
     float calcBurstSignal(int choice, float phase, float gain);
     void spaceBarPluck(bool &pluck);
+    float pitchToDelayTime(float pitch, float sampleRate);
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Karplus_strong_1AudioProcessor)
