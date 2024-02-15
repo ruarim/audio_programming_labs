@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "CircularBuffer.h"
 
 //==============================================================================
 /**
@@ -83,11 +84,8 @@ private:
     // Filter
     float filterCutoff = 0.0f;
     
-    // Buffer
-    juce::AudioSampleBuffer delayBuffer;
-    int delayBufferLength;
-    int delayReadPosition = 0;
-    int delayWritePosition = 0;
+    // Delay Buffer
+    CircularBuffer* delayBuffer;
     
     // Helpers
     int getDelayBufferReadPosition();

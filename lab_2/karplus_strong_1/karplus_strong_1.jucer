@@ -5,6 +5,10 @@
               pluginFormats="buildStandalone">
   <MAINGROUP id="zjRwDj" name="karplus_strong_1">
     <GROUP id="{3559B31E-02C1-F35B-90F5-DABC5C72A2E5}" name="Source">
+      <FILE id="j1BAmQ" name="CircularBuffer.cpp" compile="1" resource="0"
+            file="Source/CircularBuffer.cpp"/>
+      <FILE id="Na7W8z" name="CircularBuffer.h" compile="0" resource="0"
+            file="Source/CircularBuffer.h"/>
       <FILE id="BJwxiI" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="Q62x34" name="PluginProcessor.h" compile="0" resource="0"

@@ -35,11 +35,14 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
     addParameter(burstGainParam = new juce::AudioParameterFloat("bustGain", "Burst Gain", 0.0f, 1.0f, 0.5f));
     addParameter(freqParam = new juce::AudioParameterFloat("burstFreq", "Burst Freq", 20.0f, 20000.0f, 800.0f));
     addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", 20.0f, 20000.0f, 8000.0f));
-    addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 0.5f, 5.0f, 1.0f));
+    addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 0.5f, 1.0f, 0.5f));
+    
+    delayBuffer = new CircularBuffer();
 }
 
 Karplus_strong_1AudioProcessor::~Karplus_strong_1AudioProcessor()
 {
+    delete(delayBuffer);
 }
 
 void Karplus_strong_1AudioProcessor::spaceBarPluck(bool &pluck)
@@ -51,10 +54,10 @@ void Karplus_strong_1AudioProcessor::spaceBarPluck(bool &pluck)
     else if(!juce::KeyPress::isKeyCurrentlyDown(juce::KeyPress::spaceKey)) burstOn = false;
 }
 
-int Karplus_strong_1AudioProcessor::getDelayBufferReadPosition()
-{
-    return (int)(delayWritePosition - (delayTime * getSampleRate()) + delayBufferLength) % delayBufferLength;
-}
+//int Karplus_strong_1AudioProcessor::getDelayBufferReadPosition()
+//{
+//    return (int)(delayWritePosition - (delayTime * getSampleRate()) + delayBufferLength) % delayBufferLength;
+//}
 
 float Karplus_strong_1AudioProcessor::calcBurstSignal(int choice, float phase, float gain)
 {
@@ -145,11 +148,8 @@ void Karplus_strong_1AudioProcessor::prepareToPlay (double sampleRate, int sampl
     
     // init buffer
     delayTime = delayTimeParam->get();
-    delayBufferLength = (int)(2.0 * sampleRate);
-    delayBuffer.setSize(inChannels, delayBufferLength);
-    delayBuffer.clear();
-    
-    delayReadPosition = getDelayBufferReadPosition();
+    delayBuffer->prepareToPlay(sampleRate, 2.0f, inChannels);
+    delayBuffer->setReadPosition(delayTime, sampleRate);
 }
 
 void Karplus_strong_1AudioProcessor::releaseResources()
@@ -207,7 +207,7 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     spaceBarPluck(pluck);
     
     // Update buffer read positions
-    delayReadPosition = getDelayBufferReadPosition();
+    delayBuffer->setReadPosition(delayTime, sampleRate);
     
     // burst gain - set pluck to false
     if(pluck)
@@ -221,13 +221,22 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
     {
         // calculate burst signal for both channels
         float burst = 0.0;
-        if(burstGain > 0.0) // only calculate burst gain above 0
-        {   burstFreq = freqParam->get(); // get burst frequency
-            phase += burstFreq / sampleRate; // calculate phase
-            if(phase >= 1.0) phase -= 1.0; // wrap phase
+        
+        // only calculate burst gain above 0
+        if(burstGain > 0.0)
+        {
+            // get burst frequency
+            burstFreq = freqParam->get();
+            
+            // calculate phase
+            phase += burstFreq / sampleRate;
+            
+            // wrap phase
+            if(phase >= 1.0) phase -= 1.0;
             
             // calcuated selected burst signal type
             burstChoice = burstSignalParam->getIndex();
+            
             // create signal
             burst = calcBurstSignal(burstChoice, phase, burstGain);
         }
@@ -236,8 +245,11 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         // loop through channels
         for(int j = 0; j < totalNumInputChannels; ++j)
         {
+            int delayReadPosition = delayBuffer->readPosition;
+            int delayWritePosition = delayBuffer->writePosition;
+            
             //get delay data
-            float* delayData = delayBuffer.getWritePointer(j);
+            float* delayData = delayBuffer->getWritePointer(j);
             
             // apply delay
             float delayed = burst + delayData[delayReadPosition] * delayFeedback;
@@ -248,7 +260,7 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
             // alpha coefficient eq - 1 / 1 + (fs / 2 * pi * fc) - fs = sample rate fc = filter cutoff
             float alpha = 1 / (1 + (sampleRate / (2.0f * juce::MathConstants<float>::pi * cutoff)));
             
-            // first order IIR filter eq - y[n] = a * x[n] + (1 + a) * y[n-1]
+            // first order IIR filter transfer function - y[n] = a * x[n] + (1 - a) * y[n-1]
             float filtered = alpha * delayed + (1 - alpha) * (delayWritePosition > 0 ? delayData[delayWritePosition - 1] : delayed);
             
             // avoid distortion
@@ -257,7 +269,7 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
             // write currrent output to buffer
             float out = burst + delayData[delayReadPosition]; // only apply delay if time > 0
             
-            // saturation
+            // apply tanh saturation
             drive = driveParam->get();
             out = tanh(drive * out);
             buffer.getWritePointer(j)[i] = out;
@@ -267,9 +279,9 @@ void Karplus_strong_1AudioProcessor::processBlock (juce::AudioBuffer<float>& buf
         int burstSamples = (burstWidth * (float)sampleRate);
         // gradually reduce burst gain over burst length in samples
         if(burstGain >= 0.0) burstGain = burstGain - 1.0 / burstSamples;
+        
         // wrap buffer
-        if(++delayReadPosition >= delayBufferLength) delayReadPosition = 0;
-        if(++delayWritePosition >= delayBufferLength) delayWritePosition = 0;
+        delayBuffer->wrapBuffer();
     }
     
     // In case we have more outputs than inputs, clear any output channels that didn't contain input data
