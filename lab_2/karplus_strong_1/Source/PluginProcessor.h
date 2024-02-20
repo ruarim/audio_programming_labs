@@ -10,6 +10,8 @@
 
 #include <JuceHeader.h>
 #include "CircularBuffer.h"
+#include "KarplusStrongVoice.h"
+#include "KarplusStrongSound.h"
 
 //==============================================================================
 /**
@@ -68,6 +70,9 @@ private:
     // TEMP PARAM - USE MIDI
     juce::AudioParameterFloat* notePitchParam;
     
+    // Voices
+    const int numVoices = 5; 
+    
     // Note pitch
     float notePitch = 440.0f;
     
@@ -93,10 +98,12 @@ private:
     CircularBuffer* delayBuffer;
     
     // Helpers
-    int getDelayBufferReadPosition();
     float calcBurstSignal(int choice, float phase, float gain);
     void spaceBarPluck(bool &pluck);
     float pitchToDelayTime(float pitch, float sampleRate);
+    
+    //Synth
+    juce::Synthesiser karplusStrongSynth;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Karplus_strong_1AudioProcessor)
