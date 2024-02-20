@@ -35,13 +35,23 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
     addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", 50.0f, 20000.0f, 8000.0f));
     addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 0.5f, 1.0f, 0.5f));
     addParameter(notePitchParam = new juce::AudioParameterFloat("notePitch", "Note Pitch", 20.0f, 2000.0f, 440.0f));
+    
+    // create synth
+    karplusStrongSynth.clearVoices();
+    for (int i = 0; i < numVoices; i++)
+    {
+        karplusStrongSynth.addVoice(new KarplusStrongVoice());
+    }
 
-    delayBuffer = new CircularBuffer();
+    karplusStrongSynth.clearSounds();
+    karplusStrongSynth.addSound(new KarplusStrongSound());
+
 }
 
 Karplus_strong_1AudioProcessor::~Karplus_strong_1AudioProcessor()
 {
-    delete (delayBuffer);
+    karplusStrongSynth.clearSounds();
+    karplusStrongSynth.clearVoices();
 }
 
 void Karplus_strong_1AudioProcessor::spaceBarPluck(bool &pluck)
@@ -148,10 +158,16 @@ void Karplus_strong_1AudioProcessor::changeProgramName(int index, const juce::St
 void Karplus_strong_1AudioProcessor::prepareToPlay(double sampleRate, int samplesPerBlock)
 {
     int inChannels = getTotalNumInputChannels();
-
-    // init buffer
-    delayBuffer->prepareToPlay(sampleRate, 2.0f, inChannels);
-    delayBuffer->setReadPosition(delayTime, sampleRate);
+    
+    // setup delay buffer for each voice
+    for(int i = 0; i < karplusStrongSynth.getNumVoices(); i++)
+    {
+        if (KarplusStrongVoice* voice = dynamic_cast<KarplusStrongVoice*>(karplusStrongSynth.getVoice(i)))
+        {
+            voice->setupDelayBuffer(inChannels);
+        }
+    }
+    
 }
 
 void Karplus_strong_1AudioProcessor::releaseResources()
@@ -202,94 +218,30 @@ void Karplus_strong_1AudioProcessor::processBlock(juce::AudioBuffer<float> &buff
     delayTime = pitchToDelayTime(notePitch, sampleRate);
     delayFeedback = delayFeedbackParam->get();
     burstWidth = widthParam->get();
-
-    // Pluck string from gui
-    bool pluck = pluckParam->get();
-
-    // Pluck string on spacebar down
-    spaceBarPluck(pluck);
-
-    // Update buffer read positions
-    delayBuffer->setReadPosition(delayTime, sampleRate);
-
-    // burst gain - set pluck to false
-    if (pluck)
+    
+    // get voice params
+    drive = driveParam->get();
+    burstFreq = freqParam->get();
+    burstChoice = burstSignalParam->getIndex();
+    filterCutoff = filterCutoffParam->get();
+    
+    // set params for each voice
+    for(int i = 0; i < karplusStrongSynth.getNumVoices(); i++)
     {
-        pluckParam->setValueNotifyingHost(0);
-        burstGain = burstGainParam->get();
+        if (KarplusStrongVoice* voice = dynamic_cast<KarplusStrongVoice*>(karplusStrongSynth.getVoice(i)))
+        {
+            voice->setVoiceParams(burstWidth,
+                                  burstChoice,
+                                  delayTime,
+                                  delayFeedback,
+                                  drive,
+                                  filterCutoff
+                                  );
+        }
     }
 
-    // loop through samples
-    for (int i = 0; i < numSamples; ++i)
-    {
-        // calculate burst signal for both channels
-        float burst = 0.0;
-
-        // only calculate burst gain above 0
-        if (burstGain > 0.0)
-        {
-            // get burst frequency
-            burstFreq = freqParam->get();
-
-            // calculate phase
-            phase += burstFreq / sampleRate;
-
-            // wrap phase
-            if (phase >= 1.0)
-                phase -= 1.0;
-
-            // calcuated selected burst signal type
-            burstChoice = burstSignalParam->getIndex();
-
-            // create signal
-            burst = calcBurstSignal(burstChoice, phase, burstGain);
-        }
-        else
-            phase = 0.0f; // reset phase every pluck
-
-        // loop through channels
-        for (int j = 0; j < totalNumInputChannels; ++j)
-        {
-            // get buffer read / write positions
-            int delayReadPosition = delayBuffer->readPosition;
-            int delayWritePosition = delayBuffer->writePosition;
-
-            // get delay data
-            float *delayData = delayBuffer->getWritePointer(j);
-
-            // apply delay
-            float delayed = burst + delayData[delayReadPosition] * delayFeedback;
-
-            // filter delay line with first order IIR
-            float cutoff = filterCutoffParam->get();
-
-            // alpha coefficient eq - 1 / 1 + (fs / 2 * pi * fc) - fs = sample rate fc = filter cutoff
-            float alpha = 1 / (1 + (sampleRate / (2.0f * juce::MathConstants<float>::pi * cutoff)));
-
-            // first order IIR filter transfer function - y[n] = a * x[n] + (1 - a) * y[n-1]
-            float filtered = alpha * delayed + (1 - alpha) * (delayWritePosition > 0 ? delayData[delayWritePosition - 1] : delayed);
-
-            // write to delay buffer
-            delayData[delayWritePosition] = filtered;
-
-            // write currrent output to buffer
-            float out = burst + delayData[delayReadPosition]; // only apply delay if time > 0
-
-            // apply tanh saturation
-            drive = driveParam->get();
-            out = tanh(drive * out);
-            buffer.getWritePointer(j)[i] = out;
-        }
-
-        // length of burst in samples
-        int burstSamples = (burstWidth * (float)sampleRate);
-        // gradually reduce burst gain over burst length in samples
-        if (burstGain >= 0.0)
-            burstGain = burstGain - 1.0 / burstSamples;
-
-        // wrap buffer
-        delayBuffer->wrapBuffer();
-    }
+    karplusStrongSynth.renderNextBlock(buffer, midiMessages, 0, numSamples);
+    
 
     // In case we have more outputs than inputs, clear any output channels that didn't contain input data
     for (int i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
