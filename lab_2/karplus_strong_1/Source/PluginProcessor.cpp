@@ -37,8 +37,8 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
     addParameter(burstGainParam = new juce::AudioParameterFloat("bustGain", "Burst Gain", 0.0f, 1.0f, 0.5f));
     addParameter(freqParam = new juce::AudioParameterFloat("burstFreq", "Burst Freq", 20.0f, 1000.0f, 800.0f));
     addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", filterRange, 1000.0f));
-    addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 0.5f, 1.0f, 0.5f));
-    addParameter(notePitchParam = new juce::AudioParameterFloat("notePitch", "Note Pitch", 20.0f, 2000.0f, 440.0f));
+    addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 0.5f, 0.99f, 0.5f));
+    addParameter(noteFreqParam = new juce::AudioParameterFloat("noteFreq", "Note Frequency", 20.0f, 2000.0f, 440.0f));
 
     delayBuffer = new CircularBuffer();
 }
@@ -80,9 +80,9 @@ float Karplus_strong_1AudioProcessor::calcBurstSignal(int choice, float phase, f
     }
 }
 
-float Karplus_strong_1AudioProcessor::pitchToDelayTime(float pitch, float sampleRate)
+float Karplus_strong_1AudioProcessor::freqToDelayTime(float freq, float sampleRate)
 {
-    int samplesDelay = sampleRate / pitch;
+    int samplesDelay = sampleRate / freq;
     return samplesDelay / sampleRate;
 }
 
@@ -200,10 +200,10 @@ void Karplus_strong_1AudioProcessor::processBlock(juce::AudioBuffer<float> &buff
     double sampleRate = getSampleRate();
 
     // Delay, burst, pluck params from gui
-    notePitch = notePitchParam->get();
+    noteFreq = noteFreqParam->get();
 
     // Get delay time from pitch(Hz)
-    delayTime = pitchToDelayTime(notePitch, sampleRate);
+    delayTime = freqToDelayTime(noteFreq, sampleRate);
     delayFeedback = delayFeedbackParam->get();
     burstWidth = widthParam->get();
 
@@ -250,7 +250,7 @@ void Karplus_strong_1AudioProcessor::processBlock(juce::AudioBuffer<float> &buff
         }
         else
             phase = 0.0f; // reset phase every pluck
-
+        
         // loop through channels
         for (int j = 0; j < totalNumInputChannels; ++j)
         {
@@ -269,9 +269,6 @@ void Karplus_strong_1AudioProcessor::processBlock(juce::AudioBuffer<float> &buff
 
             // alpha coefficient eq - 1 / 1 + (fs / 2 * pi * fc) - fs = sample rate fc = filter cutoff
             float alpha = 1 / (1 + (sampleRate / (2.0f * juce::MathConstants<float>::pi * cutoff)));
-
-            // Handle previous sample at index 0 - y[n-1]
-            prevFiltered = (delayWritePosition > 0 ? prevFiltered : delayed);
             
             // first order IIR filter transfer function - y[n] = a * x[n] + (1 - a) * y[n-1]
             float filtered = alpha * delayed + (1 - alpha) * prevFiltered;

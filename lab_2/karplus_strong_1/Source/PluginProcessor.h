@@ -64,10 +64,10 @@ private:
     juce::AudioParameterChoice* burstSignalParam;
     juce::AudioParameterFloat* freqParam;
     juce::AudioParameterFloat* filterCutoffParam;
-    juce::AudioParameterFloat* notePitchParam;
+    juce::AudioParameterFloat* noteFreqParam;
     
-    // Note pitch
-    float notePitch = 440.0f;
+    // Note frequency - gets converted to delay time
+    float noteFreq = 440.0f;
     
     // Burst
     bool burstOn = false;
@@ -95,7 +95,7 @@ private:
     int getDelayBufferReadPosition();
     float calcBurstSignal(int choice, float phase, float gain);
     void spaceBarPluck(bool &pluck);
-    float pitchToDelayTime(float pitch, float sampleRate);
+    float freqToDelayTime(float pitch, float sampleRate);
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Karplus_strong_1AudioProcessor)
