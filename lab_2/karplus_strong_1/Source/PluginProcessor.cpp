@@ -9,6 +9,9 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#define FILTER_SKEW_FACTOR 0.25f
+
+
 //==============================================================================
 Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -24,6 +27,7 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
 {
     // set precise ranges
     auto widthRange = juce::NormalisableRange<float>(0.001f, 0.02f);
+    auto filterRange = juce::NormalisableRange<float>(50.0f, 10000.0f, FILTER_SKEW_FACTOR);
 
     // create parameters
     addParameter(burstSignalParam = new juce::AudioParameterChoice("burstSignal", "Burst Signal", {"Noise", "Sine", "Square", "Triangle"}, 0));
@@ -31,8 +35,8 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
     addParameter(delayFeedbackParam = new juce::AudioParameterFloat("feedback", "Decay", 0.80f, 0.999f, 0.90f));
     addParameter(widthParam = new juce::AudioParameterFloat("width", "Width", widthRange, 0.01f));
     addParameter(burstGainParam = new juce::AudioParameterFloat("bustGain", "Burst Gain", 0.0f, 1.0f, 0.5f));
-    addParameter(freqParam = new juce::AudioParameterFloat("burstFreq", "Burst Freq", 20.0f, 20000.0f, 800.0f));
-    addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", 50.0f, 20000.0f, 8000.0f));
+    addParameter(freqParam = new juce::AudioParameterFloat("burstFreq", "Burst Freq", 20.0f, 1000.0f, 800.0f));
+    addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", filterRange, 1000.0f));
     addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 0.5f, 1.0f, 0.5f));
     addParameter(notePitchParam = new juce::AudioParameterFloat("notePitch", "Note Pitch", 20.0f, 2000.0f, 440.0f));
 
@@ -258,7 +262,7 @@ void Karplus_strong_1AudioProcessor::processBlock(juce::AudioBuffer<float> &buff
             float *delayData = delayBuffer->getWritePointer(j);
 
             // apply delay
-            float delayed = burst + delayData[delayReadPosition] * delayFeedback;
+            float delayed = burst + delayData[delayReadPosition];
 
             // filter delay line with first order IIR
             float cutoff = filterCutoffParam->get();
@@ -266,14 +270,20 @@ void Karplus_strong_1AudioProcessor::processBlock(juce::AudioBuffer<float> &buff
             // alpha coefficient eq - 1 / 1 + (fs / 2 * pi * fc) - fs = sample rate fc = filter cutoff
             float alpha = 1 / (1 + (sampleRate / (2.0f * juce::MathConstants<float>::pi * cutoff)));
 
+            // Handle previous sample at index 0 - y[n-1]
+            prevFiltered = (delayWritePosition > 0 ? prevFiltered : delayed);
+            
             // first order IIR filter transfer function - y[n] = a * x[n] + (1 - a) * y[n-1]
-            float filtered = alpha * delayed + (1 - alpha) * (delayWritePosition > 0 ? delayData[delayWritePosition - 1] : delayed);
-
+            float filtered = alpha * delayed + (1 - alpha) * prevFiltered;
+            
+            // store previous filtered sample
+            prevFiltered = filtered;
+            
             // write to delay buffer
-            delayData[delayWritePosition] = filtered;
+            delayData[delayWritePosition] = filtered * delayFeedback;
 
             // write currrent output to buffer
-            float out = burst + delayData[delayReadPosition]; // only apply delay if time > 0
+            float out = delayData[delayReadPosition];
 
             // apply tanh saturation
             drive = driveParam->get();

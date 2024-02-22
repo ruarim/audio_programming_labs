@@ -64,8 +64,6 @@ private:
     juce::AudioParameterChoice* burstSignalParam;
     juce::AudioParameterFloat* freqParam;
     juce::AudioParameterFloat* filterCutoffParam;
-    
-    // TEMP PARAM - USE MIDI
     juce::AudioParameterFloat* notePitchParam;
     
     // Note pitch
@@ -88,6 +86,7 @@ private:
     
     // Filter
     float filterCutoff = 0.0f;
+    float prevFiltered = 0.0f;
     
     // Delay Buffer
     CircularBuffer* delayBuffer;
