@@ -2,7 +2,7 @@
 
 <JUCERPROJECT id="SCBydY" name="karplus_strong_1" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginFormats="buildStandalone">
+              pluginFormats="buildStandalone,buildVST3">
   <MAINGROUP id="zjRwDj" name="karplus_strong_1">
     <GROUP id="{3559B31E-02C1-F35B-90F5-DABC5C72A2E5}" name="Source">
       <FILE id="j1BAmQ" name="CircularBuffer.cpp" compile="1" resource="0"
