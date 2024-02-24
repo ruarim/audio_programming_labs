@@ -53,7 +53,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 387.5, 372.0, 238.0, 135.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 20.0, 627.0, 546.0, 221.0 ],
+					"presentation_rect" : [ 20.0, 598.0, 546.0, 221.0 ],
 					"subplots" : [ 						{
 							"color" : [ 0.400000005960464, 0.400000005960464, 0.75, 1.0 ],
 							"thickness" : 1.200000047683716,
@@ -92,7 +92,7 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 584.0, 134.0, 114.0, 23.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 388.0, 298.555542000000003, 114.0, 23.0 ]
+					"presentation_rect" : [ 387.696287482757441, 274.555542000000003, 114.0, 23.0 ]
 				}
 
 			}
@@ -126,7 +126,7 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 584.0, 58.5, 180.0, 23.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 204.0, 271.0, 180.0, 23.0 ],
+					"presentation_rect" : [ 203.696287482757441, 247.0, 180.0, 23.0 ],
 					"text_width" : 60.0
 				}
 
@@ -147,7 +147,7 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 584.0, 97.555542000000003, 180.0, 23.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 204.0, 298.555542000000003, 180.0, 23.0 ],
+					"presentation_rect" : [ 203.696287482757441, 274.555542000000003, 180.0, 23.0 ],
 					"text_width" : 60.0
 				}
 
@@ -167,7 +167,7 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 387.5, 139.944427000000019, 180.0, 23.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 20.0, 271.0, 180.0, 23.0 ],
+					"presentation_rect" : [ 19.696287482757441, 247.0, 180.0, 23.0 ],
 					"text_width" : 60.0
 				}
 
@@ -188,7 +188,7 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 387.5, 58.5, 180.0, 23.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 388.0, 271.0, 180.0, 23.0 ],
+					"presentation_rect" : [ 387.696287482757441, 247.0, 180.0, 23.0 ],
 					"text_width" : 60.0
 				}
 
@@ -209,7 +209,7 @@
 					"parameter_enable" : 0,
 					"patching_rect" : [ 387.5, 97.555542000000003, 180.0, 23.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 20.0, 298.555542000000003, 180.0, 23.0 ],
+					"presentation_rect" : [ 19.696287482757441, 274.555542000000003, 180.0, 23.0 ],
 					"text_width" : 60.0
 				}
 
@@ -255,7 +255,7 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 387.5, 250.0, 300.0, 100.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 20.0, 333.0, 546.0, 286.0 ],
+					"presentation_rect" : [ 20.0, 304.0, 546.0, 286.0 ],
 					"range" : [ 0.0, 1.0 ],
 					"scroll" : 3,
 					"sono" : 1
@@ -334,62 +334,6 @@
 					"saved_object_attributes" : 					{
 						"parameter_enable" : 1,
 						"parameter_mappable" : 0
-					}
-,
-					"snapshot" : 					{
-						"filetype" : "C74Snapshot",
-						"version" : 2,
-						"minorversion" : 0,
-						"name" : "snapshotlist",
-						"origin" : "vst~",
-						"type" : "list",
-						"subtype" : "Undefined",
-						"embed" : 1,
-						"snapshot" : 						{
-							"pluginname" : "karplus_strong_1.vst3",
-							"plugindisplayname" : "karplus_strong_1",
-							"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_2/karplus_strong_1/Builds/MacOSX/build/Debug/karplus_strong_1.vst3",
-							"pluginsaveduniqueid" : 0,
-							"version" : 1,
-							"isbank" : 0,
-							"isbase64" : 1,
-							"blob" : "152.VMjLg7H....OVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9.."
-						}
-,
-						"snapshotlist" : 						{
-							"current_snapshot" : 0,
-							"entries" : [ 								{
-									"filetype" : "C74Snapshot",
-									"version" : 2,
-									"minorversion" : 0,
-									"name" : "karplus_strong_1",
-									"origin" : "karplus_strong_1.vst3",
-									"type" : "VST3",
-									"subtype" : "AudioEffect",
-									"embed" : 0,
-									"snapshot" : 									{
-										"pluginname" : "karplus_strong_1.vst3",
-										"plugindisplayname" : "karplus_strong_1",
-										"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_2/karplus_strong_1/Builds/MacOSX/build/Debug/karplus_strong_1.vst3",
-										"pluginsaveduniqueid" : 0,
-										"version" : 1,
-										"isbank" : 0,
-										"isbase64" : 1,
-										"blob" : "152.VMjLg7H....OVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9.."
-									}
-,
-									"fileref" : 									{
-										"name" : "karplus_strong_1",
-										"filename" : "karplus_strong_1.maxsnap",
-										"filepath" : "~/Documents/Max 8/Snapshots",
-										"filepos" : -1,
-										"snapshotfileid" : "dfeb42c35e10dd66cc1a2609695b9dcd"
-									}
-
-								}
- ]
-						}
-
 					}
 ,
 					"text" : "vst~",
@@ -598,7 +542,7 @@
 					"numoutlets" : 0,
 					"patching_rect" : [ 25.66666579246521, 456.5, 24.666678547859192, 22.5 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 6.66666579246521, 7.119487524032593, 574.059243380584462, 854.33333945274353 ],
+					"presentation_rect" : [ 6.66666579246521, 7.119487524032593, 574.059243380584462, 825.33333945274353 ],
 					"proportion" : 0.5
 				}
 
@@ -777,14 +721,7 @@
 			"inherited_shortname" : 1
 		}
 ,
-		"dependency_cache" : [ 			{
-				"name" : "karplus_strong_1.maxsnap",
-				"bootpath" : "~/Documents/Max 8/Snapshots",
-				"patcherrelativepath" : "../../../Max 8/Snapshots",
-				"type" : "mx@s",
-				"implicit" : 1
-			}
- ],
+		"dependency_cache" : [  ],
 		"autosave" : 0
 	}
 
