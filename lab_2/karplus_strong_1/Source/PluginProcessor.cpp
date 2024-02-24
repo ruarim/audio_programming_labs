@@ -30,13 +30,13 @@ Karplus_strong_1AudioProcessor::Karplus_strong_1AudioProcessor()
     auto filterRange = juce::NormalisableRange<float>(50.0f, 10000.0f, FILTER_SKEW_FACTOR);
 
     // create parameters
-    addParameter(burstSignalParam = new juce::AudioParameterChoice("burstSignal", "Burst Signal", {"Noise", "Sine", "Square", "Triangle"}, 0));
+    addParameter(burstSignalParam = new juce::AudioParameterChoice("burstSignal", "Burst Signal", {"Noise", "Sine", "Square", "Triangle", "Saw"}, 0));
     addParameter(pluckParam = new juce::AudioParameterBool("pluck", "Pluck string - Press Spacebar", 0));
     addParameter(delayFeedbackParam = new juce::AudioParameterFloat("feedback", "Decay", 0.80f, 0.999f, 0.90f));
     addParameter(widthParam = new juce::AudioParameterFloat("width", "Width", widthRange, 0.01f));
     addParameter(burstGainParam = new juce::AudioParameterFloat("bustGain", "Burst Gain", 0.0f, 1.0f, 0.5f));
     addParameter(freqParam = new juce::AudioParameterFloat("burstFreq", "Burst Freq", 20.0f, 1000.0f, 800.0f));
-    addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", filterRange, 1000.0f));
+    addParameter(filterCutoffParam = new juce::AudioParameterFloat("filterCutoff", "Filter Cutoff", filterRange, 5000.0f));
     addParameter(driveParam = new juce::AudioParameterFloat("drive", "Drive", 0.5f, 0.99f, 0.5f));
     addParameter(noteFreqParam = new juce::AudioParameterFloat("noteFreq", "Note Frequency", 20.0f, 2000.0f, 440.0f));
 
@@ -66,7 +66,7 @@ float Karplus_strong_1AudioProcessor::calcBurstSignal(int choice, float phase, f
     switch (choice)
     {
     case 0: // noise
-        return 2.0 * gain * ((double)rand() / RAND_MAX - 1.0);
+        return 2.0f * gain * ((double)rand() / RAND_MAX) - 1.0f;
     case 1: // sine
         return sine;
     case 2: // square
@@ -74,7 +74,7 @@ float Karplus_strong_1AudioProcessor::calcBurstSignal(int choice, float phase, f
     case 3: // triangle
         return (2.0f * std::abs(2.0f * (phase - std::floor(phase + 0.5f))) - 1.0f) * gain;
     case 4: // saw
-        return (2.0f * (phase - std::floor(phase)) - 1) * gain;
+        return (2.0f * (phase - std::floor(phase) - 0.5f)) * gain;
     default:
         return 0.0f;
     }
