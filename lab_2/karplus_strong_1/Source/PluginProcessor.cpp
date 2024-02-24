@@ -65,18 +65,18 @@ float Karplus_strong_1AudioProcessor::calcBurstSignal(int choice, float phase, f
 
     switch (choice)
     {
-    case 0: // noise
-        return 2.0f * gain * ((double)rand() / RAND_MAX) - 1.0f;
-    case 1: // sine
-        return sine;
-    case 2: // square
-        return (sine >= 0) ? gain : -gain;
-    case 3: // triangle
-        return (2.0f * std::abs(2.0f * (phase - std::floor(phase + 0.5f))) - 1.0f) * gain;
-    case 4: // saw
-        return (2.0f * (phase - std::floor(phase) - 0.5f)) * gain;
-    default:
-        return 0.0f;
+        case 0: // noise
+            return (2.0f * (((float)rand() / RAND_MAX) - 0.5f)) * gain;
+        case 1: // sine
+            return sine;
+        case 2: // square
+            return (sine >= 0) ? gain : -gain;
+        case 3: // triangle
+            return (2.0f * std::abs(2.0f * (phase - std::floor(phase + 0.5f))) - 1.0f) * gain;
+        case 4: // saw
+            return (2.0f * (phase - std::floor(phase) - 0.5f)) * gain;
+        default:
+            return 0.0f;
     }
 }
 
@@ -153,8 +153,8 @@ void Karplus_strong_1AudioProcessor::prepareToPlay(double sampleRate, int sample
 {
     int inChannels = getTotalNumInputChannels();
 
-    // init buffer
-    delayBuffer->prepareToPlay(sampleRate, 2.0f, inChannels);
+    // init circular buffer
+    delayBuffer->prepareToPlay(sampleRate, maxDelayTimeSeconds, inChannels);
     delayBuffer->setReadPosition(delayTime, sampleRate);
 }
 
@@ -216,7 +216,7 @@ void Karplus_strong_1AudioProcessor::processBlock(juce::AudioBuffer<float> &buff
     // Update buffer read positions
     delayBuffer->setReadPosition(delayTime, sampleRate);
 
-    // burst gain - set pluck to false
+    // get burst gain of pucked and set pluck toggle to false
     if (pluck)
     {
         pluckParam->setValueNotifyingHost(0);
@@ -285,6 +285,8 @@ void Karplus_strong_1AudioProcessor::processBlock(juce::AudioBuffer<float> &buff
             // apply tanh saturation
             drive = driveParam->get();
             out = tanh(drive * out);
+            
+            // write output to buffer
             buffer.getWritePointer(j)[i] = out;
         }
 

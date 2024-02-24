@@ -90,6 +90,7 @@ private:
     
     // Delay Buffer
     CircularBuffer* delayBuffer;
+    float maxDelayTimeSeconds = 2.0f;
     
     // Helpers
     int getDelayBufferReadPosition();
