@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 87.0, 1372.0, 869.0 ],
+		"rect" : [ 34.0, 87.0, 972.0, 869.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 1,
 		"default_fontsize" : 12.0,
@@ -40,41 +40,19 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
-					"audioframerate" : 1500.0,
-					"bgcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
-					"domainlabel" : "Amp",
-					"gridorigincolor" : [ 1.0, 1.0, 1.0, 1.0 ],
-					"id" : "obj-7",
-					"margins" : [ 1.0, 0.0, 1.0, 0.0 ],
-					"maxclass" : "plot~",
-					"numinlets" : 1,
+					"activebgcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
+					"grid" : 3,
+					"id" : "obj-41",
+					"maxclass" : "live.scope~",
+					"mode" : 1,
+					"numinlets" : 2,
 					"numoutlets" : 1,
-					"numpoints" : 8820,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 387.5, 372.0, 238.0, 135.0 ],
+					"outlettype" : [ "bang" ],
+					"patching_rect" : [ 432.782372994636717, 681.273742377758026, 184.0, 68.0 ],
 					"presentation" : 1,
-					"presentation_rect" : [ 20.0, 598.0, 546.0, 221.0 ],
-					"subplots" : [ 						{
-							"color" : [ 0.400000005960464, 0.400000005960464, 0.75, 1.0 ],
-							"thickness" : 1.200000047683716,
-							"point_style" : "none",
-							"line_style" : "lines",
-							"number_style" : "none",
-							"filter" : "none",
-							"domain_start" : 0.0,
-							"domain_end" : 1.0,
-							"domain_style" : "linear",
-							"domain_markers" : [ 0.0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0 ],
-							"domain_labels" : [  ],
-							"range_start" : -1.0,
-							"range_end" : 1.0,
-							"range_style" : "linear",
-							"range_markers" : [ -0.5, 0.0, 0.5 ],
-							"range_labels" : [  ],
-							"origin_x" : 0.0,
-							"origin_y" : 0.0
-						}
- ]
+					"presentation_rect" : [ 20.0, 596.273742377758026, 546.0, 223.0 ],
+					"rounded" : 0.0,
+					"trigger_threshold" : 0.01
 				}
 
 			}
@@ -664,7 +642,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-7", 0 ],
+					"destination" : [ "obj-41", 0 ],
 					"order" : 0,
 					"source" : [ "obj-35", 0 ]
 				}
