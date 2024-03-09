@@ -11,11 +11,13 @@
 
 //==============================================================================
 Graphical_equaliserAudioProcessorEditor::Graphical_equaliserAudioProcessorEditor (Graphical_equaliserAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p), eqKnobs(p)
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setSize (585, 320);
+    
+    addAndMakeVisible(&eqKnobs);
 }
 
 Graphical_equaliserAudioProcessorEditor::~Graphical_equaliserAudioProcessorEditor()
@@ -25,12 +27,7 @@ Graphical_equaliserAudioProcessorEditor::~Graphical_equaliserAudioProcessorEdito
 //==============================================================================
 void Graphical_equaliserAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
-    g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void Graphical_equaliserAudioProcessorEditor::resized()

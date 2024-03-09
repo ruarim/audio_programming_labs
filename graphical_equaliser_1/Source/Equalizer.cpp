@@ -1,15 +1,15 @@
-#include "Equaliser.h"
+#include "Equalizer.h"
 
-Equaliser::Equaliser()
+Equalizer::Equalizer()
 {
     
 }
-Equaliser::~Equaliser()
+Equalizer::~Equalizer()
 {
 
 }
 
-void Equaliser::prepareToPlay(int numChannels, float sampleRate)
+void Equalizer::prepareToPlay(int numChannels, float sampleRate)
 {
     this->sampleRate = sampleRate;
     
@@ -21,7 +21,7 @@ void Equaliser::prepareToPlay(int numChannels, float sampleRate)
     // add filters for each channels
     for(int i = 0; i <= numChannels; i++)
     {
-        // Will these be delted - if not how to delete ?
+        // @note Will these be deleted - if not how to delete ?
         
         juce::IIRFilter* lowFilter = new juce::IIRFilter();
         lowFilters.add(lowFilter);
@@ -34,8 +34,9 @@ void Equaliser::prepareToPlay(int numChannels, float sampleRate)
     }
 }
 
-void Equaliser::process(float* channelData, int channel, int numSamples, int mode)
+void Equalizer::process(float* channelData, int channel, int numSamples, int mode)
 {
+    // REMOVE SWITCH
     switch (mode) {
         case 0: // serial - low -> mid -> high
             return processSerial(channelData, channel, numSamples);
@@ -45,7 +46,7 @@ void Equaliser::process(float* channelData, int channel, int numSamples, int mod
     }
 }
 
-void Equaliser::makeCoefficients(float lowGainDb, float lowQ, float midGainDb, float midQ, float highGainDb, float highQ)
+void Equalizer::makeCoefficients()
 {
     // make IIR coefficients
     float lowGain = pow(10, lowGainDb / 20.0);
@@ -63,10 +64,9 @@ void Equaliser::makeCoefficients(float lowGainDb, float lowQ, float midGainDb, f
     for (int i = 0; i < highFilters.size(); i++) highFilters[i]->setCoefficients(highCoefficients);
 }
 
-void Equaliser::processSerial(float* channelData, int channel, int numSamples)
+void Equalizer::processSerial(float* channelData, int channel, int numSamples)
 {
     lowFilters[channel]->processSamples(channelData, numSamples);
     midFilters[channel]->processSamples(channelData, numSamples);
     highFilters[channel]->processSamples(channelData, numSamples);
-
 }

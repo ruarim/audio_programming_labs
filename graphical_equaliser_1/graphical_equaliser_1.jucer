@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="kUYmrE" name="graphical_equaliser" projectType="audioplug"
+<JUCERPROJECT id="kUYmrE" name="graphical_equaliser_1" projectType="audioplug"
               useAppConfig="0" addUsingNamespaceToJuceHeader="0" displaySplashScreen="1"
               jucerFormatVersion="1" pluginFormats="buildStandalone,buildVST3">
-  <MAINGROUP id="VIkJY8" name="graphical_equaliser">
+  <MAINGROUP id="VIkJY8" name="graphical_equaliser_1">
     <GROUP id="{FBD8821A-5AAA-507B-ECB6-E4DA1A5CA96C}" name="Source">
+      <GROUP id="{14D17625-44E7-69A3-DE33-20758F3F3C0F}" name="UIComponents">
+        <FILE id="CEbdvE" name="EQKnobs.cpp" compile="1" resource="0" file="Source/EQKnobs.cpp"/>
+        <FILE id="gg1fvC" name="EQKnobs.h" compile="0" resource="0" file="Source/EQKnobs.h"/>
+      </GROUP>
       <FILE id="nj6JbY" name="Equaliser.cpp" compile="1" resource="0" file="Source/Equaliser.cpp"/>
       <FILE id="DT5DBO" name="Equaliser.h" compile="0" resource="0" file="Source/Equaliser.h"/>
       <FILE id="WxBidm" name="PluginProcessor.cpp" compile="1" resource="0"

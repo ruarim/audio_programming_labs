@@ -40,6 +40,78 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"basictuning" : 0,
+					"clipheight" : 22.0,
+					"data" : 					{
+						"clips" : [ 							{
+								"absolutepath" : "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/D15.wav",
+								"filename" : "D15.wav",
+								"filekind" : "audiofile",
+								"id" : "u005001023",
+								"loop" : 1,
+								"content_state" : 								{
+									"loop" : 1
+								}
+
+							}
+, 							{
+								"absolutepath" : "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E4.wav",
+								"filename" : "E4.wav",
+								"filekind" : "audiofile",
+								"id" : "u603001031",
+								"loop" : 1,
+								"content_state" : 								{
+									"loop" : 1
+								}
+
+							}
+, 							{
+								"absolutepath" : "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E7.wav",
+								"filename" : "E7.wav",
+								"filekind" : "audiofile",
+								"id" : "u400001038",
+								"loop" : 0,
+								"content_state" : 								{
+
+								}
+
+							}
+, 							{
+								"absolutepath" : "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E9.wav",
+								"filename" : "E9.wav",
+								"filekind" : "audiofile",
+								"id" : "u628001045",
+								"loop" : 0,
+								"content_state" : 								{
+
+								}
+
+							}
+ ]
+					}
+,
+					"followglobaltempo" : 0,
+					"formantcorrection" : 0,
+					"id" : "obj-1",
+					"maxclass" : "playlist~",
+					"mode" : "basic",
+					"numinlets" : 1,
+					"numoutlets" : 5,
+					"originallength" : [ 0 ],
+					"originaltempo" : 0,
+					"outlettype" : [ "signal", "signal", "signal", "", "dictionary" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 258.0, 346.0, 150.0, 92.0 ],
+					"pitchcorrection" : 0,
+					"presentation" : 1,
+					"presentation_rect" : [ 417.696287482757498, 17.0, 150.0, 91.452829837799072 ],
+					"quality" : "basic",
+					"timestretch" : [ 0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"activebgcolor" : [ 0.0, 0.0, 0.0, 1.0 ],
 					"grid" : 3,
 					"id" : "obj-41",
@@ -314,6 +386,62 @@
 						"parameter_mappable" : 0
 					}
 ,
+					"snapshot" : 					{
+						"filetype" : "C74Snapshot",
+						"version" : 2,
+						"minorversion" : 0,
+						"name" : "snapshotlist",
+						"origin" : "vst~",
+						"type" : "list",
+						"subtype" : "Undefined",
+						"embed" : 1,
+						"snapshot" : 						{
+							"pluginname" : "graphical_equaliser.vst3",
+							"plugindisplayname" : "graphical_equaliser",
+							"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphical_equaliser/Builds/MacOSX/build/Debug/graphical_equaliser.vst3",
+							"pluginsaveduniqueid" : 0,
+							"version" : 1,
+							"isbank" : 0,
+							"isbase64" : 1,
+							"blob" : "152.VMjLg7H....OVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9.."
+						}
+,
+						"snapshotlist" : 						{
+							"current_snapshot" : 0,
+							"entries" : [ 								{
+									"filetype" : "C74Snapshot",
+									"version" : 2,
+									"minorversion" : 0,
+									"name" : "graphical_equaliser",
+									"origin" : "graphical_equaliser.vst3",
+									"type" : "VST3",
+									"subtype" : "AudioEffect",
+									"embed" : 0,
+									"snapshot" : 									{
+										"pluginname" : "graphical_equaliser.vst3",
+										"plugindisplayname" : "graphical_equaliser",
+										"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphical_equaliser/Builds/MacOSX/build/Debug/graphical_equaliser.vst3",
+										"pluginsaveduniqueid" : 0,
+										"version" : 1,
+										"isbank" : 0,
+										"isbase64" : 1,
+										"blob" : "152.VMjLg7H....OVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9XCLt3hKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYjKAQjYPQSPWgUdMcjKAQjct3hdA4hKt3hKt3hKtnTUv.UQAslXuk0UXoWUFE0YQcEV77RRC8Vav8lak4Fc9vyKVMEUy.Ea0cVZtMEcgQWY9.."
+									}
+,
+									"fileref" : 									{
+										"name" : "graphical_equaliser",
+										"filename" : "graphical_equaliser.maxsnap",
+										"filepath" : "~/Documents/Max 8/Snapshots",
+										"filepos" : -1,
+										"snapshotfileid" : "ce4ac3a17fa17eaaed7b690ffa41ec66"
+									}
+
+								}
+ ]
+						}
+
+					}
+,
 					"text" : "vst~",
 					"varname" : "vst~",
 					"viewvisibility" : 0
@@ -528,6 +656,20 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
+					"destination" : [ "obj-35", 1 ],
+					"source" : [ "obj-1", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-35", 0 ],
+					"source" : [ "obj-1", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-31", 0 ],
 					"source" : [ "obj-10", 0 ]
 				}
@@ -699,7 +841,42 @@
 			"inherited_shortname" : 1
 		}
 ,
-		"dependency_cache" : [  ],
+		"dependency_cache" : [ 			{
+				"name" : "D15.wav",
+				"bootpath" : "~/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples",
+				"patcherrelativepath" : "../../../SAMPLES/sounds/OPN_Replica_SP555_CF_Samples",
+				"type" : "WAVE",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "E4.wav",
+				"bootpath" : "~/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples",
+				"patcherrelativepath" : "../../../SAMPLES/sounds/OPN_Replica_SP555_CF_Samples",
+				"type" : "WAVE",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "E7.wav",
+				"bootpath" : "~/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples",
+				"patcherrelativepath" : "../../../SAMPLES/sounds/OPN_Replica_SP555_CF_Samples",
+				"type" : "WAVE",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "E9.wav",
+				"bootpath" : "~/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples",
+				"patcherrelativepath" : "../../../SAMPLES/sounds/OPN_Replica_SP555_CF_Samples",
+				"type" : "WAVE",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "graphical_equaliser.maxsnap",
+				"bootpath" : "~/Documents/Max 8/Snapshots",
+				"patcherrelativepath" : "../../../Max 8/Snapshots",
+				"type" : "mx@s",
+				"implicit" : 1
+			}
+ ],
 		"autosave" : 0
 	}
 

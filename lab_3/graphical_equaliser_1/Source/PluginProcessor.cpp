@@ -24,15 +24,6 @@ Graphical_equaliserAudioProcessor::Graphical_equaliserAudioProcessor()
 {
     // create equaliser
     eq = new Equaliser();
-    
-    // create UI params
-    addParameter(processingModeParam = new juce::AudioParameterChoice("processingMode", "Processing Mode", {"Serial" , "Parralel"}, 0));
-    addParameter(lowGainParam = new juce::AudioParameterFloat("lowGain", "Low Gain", -24.0f, 12.0f, 0.0f));
-    addParameter(lowQParam = new juce::AudioParameterFloat("lowQ", "Low Q", 0.1f, 20.0f, 2.0f));
-    addParameter(midGainParam = new juce::AudioParameterFloat("midGain", "Mid Gain", -24.0f, 12.0f, 0.0f));
-    addParameter(midQParam = new juce::AudioParameterFloat("midQ", "Mid Q", 0.1f, 20.0f, 2.0f));
-    addParameter(highGainParam = new juce::AudioParameterFloat("highGain", "High Gain", -24.0f, 12.0f, 0.0f));
-    addParameter(highQParam = new juce::AudioParameterFloat("highQ", "High Q", 0.1f, 20.0f, 2.0f));
 }
 
 Graphical_equaliserAudioProcessor::~Graphical_equaliserAudioProcessor()
@@ -143,32 +134,27 @@ bool Graphical_equaliserAudioProcessor::isBusesLayoutSupported (const BusesLayou
 
 void Graphical_equaliserAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    juce::ScopedNoDenormals noDenormals;
-    auto numInputChannels  = getTotalNumInputChannels();
-    auto numOutputChannels = getTotalNumOutputChannels();
-
-    for (auto i = numInputChannels; i < numOutputChannels; ++i)
-        buffer.clear (i, 0, buffer.getNumSamples());
-    
-    float processingMode = processingModeParam->getIndex();
-    
-    float lowGain = lowGainParam->get();
-    float lowQ = lowQParam->get();
-    float midGain = midGainParam->get();
-    float midQ = midQParam->get();
-    float highGain = highGainParam->get();
-    float highQ = highQParam->get();
-    
-    eq->makeCoefficients(lowGain, lowQ, midGain, midQ, highGain, highQ);
-    
-    for (int channel = 0; channel < numInputChannels; ++channel)
-    {
-        int numSamples = buffer.getNumSamples();
-        auto* channelData = buffer.getWritePointer(channel);
-        for (int i = 0; i < numSamples; ++i) channelData[i] = 2.0f * rand() / (float)RAND_MAX - 1.0f;
-        
-        eq->process(channelData, channel, numSamples, processingMode);
-    }
+//    juce::ScopedNoDenormals noDenormals;
+//    auto numInputChannels  = getTotalNumInputChannels();
+//    auto numOutputChannels = getTotalNumOutputChannels();
+//
+//    for (auto i = numInputChannels; i < numOutputChannels; ++i)
+//        buffer.clear (i, 0, buffer.getNumSamples());
+//
+//
+//    // mid-side equalisation
+//    // add mono freq control?
+//    //      - low shelf filter is mono?
+//
+//    eq->makeCoefficients();
+//
+//    for (int channel = 0; channel < numInputChannels; ++channel)
+//    {
+//        int numSamples = buffer.getNumSamples();
+//        auto* channelData = buffer.getWritePointer(channel);
+//
+//        eq->process(channelData, channel, numSamples, processingMode);
+//    }
 }
 
 //==============================================================================
@@ -179,7 +165,7 @@ bool Graphical_equaliserAudioProcessor::hasEditor() const
 
 juce::AudioProcessorEditor* Graphical_equaliserAudioProcessor::createEditor()
 {
-    return new juce::GenericAudioProcessorEditor(*this);
+    return new Graphical_equaliserAudioProcessorEditor(*this);
 }   
 
 //==============================================================================
