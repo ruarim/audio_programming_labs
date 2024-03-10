@@ -23,7 +23,7 @@ Graphical_equaliser_2AudioProcessor::Graphical_equaliser_2AudioProcessor()
 #endif
 {
     // create equaliser
-    eq = new FilterBank();
+    eq = new EQFilters();
 }
 
 Graphical_equaliser_2AudioProcessor::~Graphical_equaliser_2AudioProcessor()
@@ -153,7 +153,7 @@ void Graphical_equaliser_2AudioProcessor::processBlock (juce::AudioBuffer<float>
         int numSamples = buffer.getNumSamples();
         auto* channelData = buffer.getWritePointer(channel);
         
-        for (int i = 0; i < numSamples; ++i) channelData[i] = 2.0f * rand() / (float)RAND_MAX - 1.0f; //white noise for testing
+//        for (int i = 0; i < numSamples; ++i) channelData[i] = 2.0f * rand() / (float)RAND_MAX - 1.0f; //white noise for testing
 
         eq->process(channelData, channel, numSamples);
     }

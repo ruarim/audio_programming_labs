@@ -9,7 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "FilterBank.h"
+#include "EQFilters.h"
 
 //==============================================================================
 /**
@@ -54,7 +54,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    FilterBank* eq;
+    EQFilters* eq;
 
 private:
     //==============================================================================

@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    FilterBank.h
+    EQFilters.h
     Created: 10 Mar 2024 1:33:17am
     Author:  Ruari Molyneux
 
@@ -11,11 +11,11 @@
 #pragma once
 #include <JuceHeader.h>
 
-class FilterBank
+class EQFilters
 {
 public:
-    FilterBank();
-    ~FilterBank();
+    EQFilters();
+    ~EQFilters();
     
     void prepareToPlay(int numChannels, float sampleRate);
     void process(float* channelData, int channel, int numSamples);
@@ -37,21 +37,22 @@ public:
 private:
     float sampleRate = 0;
     
+    // cetnter frequncies based on ISO 266 - https://www.iso.org/standard/1350.html
     // low shelf
     juce::OwnedArray<juce::IIRFilter> lowFilters;
-    const float lowFreq = 400.0f;
+    const float lowFreq = 80.0f;
     
     // low mid peaking
     juce::OwnedArray<juce::IIRFilter> lowMidFilters;
-    const float lowMidFreq = 3000.0f;
+    const float lowMidFreq = 315.0f;
     
     // high mid peaking
     juce::OwnedArray<juce::IIRFilter> highMidFilters;
-    const float highMidFreq = 6000.0f;
+    const float highMidFreq = 1250.0f;
     
     // high shelf
     juce::OwnedArray<juce::IIRFilter> highFilters;
-    const float highFreq = 16000.0f;
+    const float highFreq = 5000.0f;
 
     
     void processSerial(float* channelData, int channel, int numSamples);

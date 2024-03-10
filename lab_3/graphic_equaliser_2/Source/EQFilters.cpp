@@ -1,19 +1,19 @@
 /*
   ==============================================================================
 
-    FilterBank.cpp
+    EQFilters.cpp
     Created: 10 Mar 2024 1:33:17am
     Author:  Ruari Molyneux
 
   ==============================================================================
 */
 
-#include "FilterBank.h"
+#include "EQFilters.h"
 
-FilterBank::FilterBank(){}
-FilterBank::~FilterBank(){}
+EQFilters::EQFilters(){}
+EQFilters::~EQFilters(){}
 
-void FilterBank::prepareToPlay(int numChannels, float sampleRate)
+void EQFilters::prepareToPlay(int numChannels, float sampleRate)
 {
     this->sampleRate = sampleRate;
     
@@ -42,12 +42,12 @@ void FilterBank::prepareToPlay(int numChannels, float sampleRate)
     }
 }
 
-void FilterBank::process(float* channelData, int channel, int numSamples)
+void EQFilters::process(float* channelData, int channel, int numSamples)
 {
     processSerial(channelData, channel, numSamples);
 }
 
-void FilterBank::makeCoefficients()
+void EQFilters::makeCoefficients()
 {
     // make IIR coefficients
     float lowGain = pow(10, lowGainDb / 20.0);
@@ -69,7 +69,7 @@ void FilterBank::makeCoefficients()
     for (int i = 0; i < highFilters.size(); i++) highFilters[i]->setCoefficients(highCoefficients);
 }
 
-void FilterBank::processSerial(float* channelData, int channel, int numSamples)
+void EQFilters::processSerial(float* channelData, int channel, int numSamples)
 {
     lowFilters[channel]->processSamples(channelData, numSamples);
     lowMidFilters[channel]->processSamples(channelData, numSamples);

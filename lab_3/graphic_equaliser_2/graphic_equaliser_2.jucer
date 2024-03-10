@@ -5,14 +5,12 @@
               jucerFormatVersion="1">
   <MAINGROUP id="dOtaHk" name="graphic_equaliser_2">
     <GROUP id="{3F8578C4-90A4-C509-5357-0ED2F46BA6B4}" name="Source">
-      <FILE id="evL0vn" name="FilterBank.cpp" compile="1" resource="0" file="Source/FilterBank.cpp"/>
-      <FILE id="iYeSFv" name="FilterBank.h" compile="0" resource="0" file="Source/FilterBank.h"/>
+      <FILE id="evL0vn" name="EQFilters.cpp" compile="1" resource="0" file="Source/EQFilters.cpp"/>
+      <FILE id="iYeSFv" name="EQFilters.h" compile="0" resource="0" file="Source/EQFilters.h"/>
       <GROUP id="{727A0535-AA10-B09C-E539-52063636E52F}" name="GUI">
         <FILE id="r87Mz3" name="EQControls.cpp" compile="1" resource="0" file="Source/EQControls.cpp"/>
         <FILE id="SA1UAm" name="EQControls.h" compile="0" resource="0" file="Source/EQControls.h"/>
       </GROUP>
-      <FILE id="m8fSiZ" name="Equaliser.cpp" compile="1" resource="0" file="Source/Equaliser.cpp"/>
-      <FILE id="J6hNbf" name="Equaliser.h" compile="0" resource="0" file="Source/Equaliser.h"/>
       <FILE id="m3tl3A" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="g5ldMM" name="PluginProcessor.h" compile="0" resource="0"

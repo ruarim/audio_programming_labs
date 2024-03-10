@@ -27,7 +27,8 @@
 //[/MiscUserDefs]
 
 //==============================================================================
-EQControls::EQControls (Graphical_equaliser_2AudioProcessor& p) : processor(p)
+EQControls::EQControls (Graphical_equaliser_2AudioProcessor& p)
+    : processor(p)
 {
     //[Constructor_pre] You can add your own custom stuff here..
     //[/Constructor_pre]
@@ -78,7 +79,7 @@ EQControls::EQControls (Graphical_equaliser_2AudioProcessor& p) : processor(p)
 
     lowQ.reset (new juce::Slider ("Low Q"));
     addAndMakeVisible (lowQ.get());
-    lowQ->setRange (0.1, 20, 0.1);
+    lowQ->setRange (0.2, 12, 0.1);
     lowQ->setSliderStyle (juce::Slider::LinearHorizontal);
     lowQ->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
     lowQ->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
@@ -89,7 +90,7 @@ EQControls::EQControls (Graphical_equaliser_2AudioProcessor& p) : processor(p)
 
     lowMidQ.reset (new juce::Slider ("Low Mid Q"));
     addAndMakeVisible (lowMidQ.get());
-    lowMidQ->setRange (0.1, 20, 0.1);
+    lowMidQ->setRange (0.2, 12, 0.1);
     lowMidQ->setSliderStyle (juce::Slider::LinearHorizontal);
     lowMidQ->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
     lowMidQ->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
@@ -100,7 +101,7 @@ EQControls::EQControls (Graphical_equaliser_2AudioProcessor& p) : processor(p)
 
     highMidQ.reset (new juce::Slider ("High Mid Q"));
     addAndMakeVisible (highMidQ.get());
-    highMidQ->setRange (0.1, 20, 0.1);
+    highMidQ->setRange (0.2, 12, 0.1);
     highMidQ->setSliderStyle (juce::Slider::LinearHorizontal);
     highMidQ->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
     highMidQ->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
@@ -111,7 +112,7 @@ EQControls::EQControls (Graphical_equaliser_2AudioProcessor& p) : processor(p)
 
     highQ.reset (new juce::Slider ("High Q"));
     addAndMakeVisible (highQ.get());
-    highQ->setRange (0.1, 20, 0.1);
+    highQ->setRange (0.2, 12, 0.1);
     highQ->setSliderStyle (juce::Slider::LinearHorizontal);
     highQ->setTextBoxStyle (juce::Slider::TextBoxBelow, false, 80, 20);
     highQ->setColour (juce::Slider::thumbColourId, juce::Colours::coral);
@@ -317,41 +318,62 @@ void EQControls::resized()
 
 void EQControls::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
-    FilterBank* eq = processor.eq;
+    //[UsersliderValueChanged_Pre]
+    EQFilters* eq = processor.eq;
     float sliderValue = sliderThatWasMoved->getValue();
+    //[/UsersliderValueChanged_Pre]
 
     if (sliderThatWasMoved == lowGainKnob.get())
     {
+        //[UserSliderCode_lowGainKnob] -- add your slider handling code here..
         eq->lowGainDb = sliderValue;
+        //[/UserSliderCode_lowGainKnob]
     }
     else if (sliderThatWasMoved == highMidGain.get())
     {
+        //[UserSliderCode_highMidGain] -- add your slider handling code here..
         eq->highMidGainDb = sliderValue;
+        //[/UserSliderCode_highMidGain]
     }
     else if (sliderThatWasMoved == highGainKnob.get())
     {
+        //[UserSliderCode_highGainKnob] -- add your slider handling code here..
         eq->highGainDb = sliderValue;
+        //[/UserSliderCode_highGainKnob]
     }
     else if (sliderThatWasMoved == lowMidGainKnob.get())
     {
+        //[UserSliderCode_lowMidGainKnob] -- add your slider handling code here..
         eq->lowMidGainDb = sliderValue;
+        //[/UserSliderCode_lowMidGainKnob]
     }
     else if (sliderThatWasMoved == lowQ.get())
     {
+        //[UserSliderCode_lowQ] -- add your slider handling code here..
         eq->lowQ = sliderValue;
+        //[/UserSliderCode_lowQ]
     }
     else if (sliderThatWasMoved == lowMidQ.get())
     {
+        //[UserSliderCode_lowMidQ] -- add your slider handling code here..
         eq->lowMidQ = sliderValue;
+        //[/UserSliderCode_lowMidQ]
     }
     else if (sliderThatWasMoved == highMidQ.get())
     {
+        //[UserSliderCode_highMidQ] -- add your slider handling code here..
         eq->highMidQ = sliderValue;
+        //[/UserSliderCode_highMidQ]
     }
     else if (sliderThatWasMoved == highQ.get())
     {
+        //[UserSliderCode_highQ] -- add your slider handling code here..
         eq->highQ = sliderValue;
+        //[/UserSliderCode_highQ]
     }
+
+    //[UsersliderValueChanged_Post]
+    //[/UsersliderValueChanged_Post]
 }
 
 
@@ -370,9 +392,10 @@ void EQControls::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 BEGIN_JUCER_METADATA
 
 <JUCER_COMPONENT documentType="Component" className="EQControls" componentName=""
-                 parentClasses="public juce::Component" constructorParams="" variableInitialisers=""
-                 snapPixels="8" snapActive="1" snapShown="1" overlayOpacity="0.330"
-                 fixedSize="0" initialWidth="600" initialHeight="400">
+                 parentClasses="public juce::Component" constructorParams="Graphical_equaliser_2AudioProcessor&amp; p"
+                 variableInitialisers="processor(p)" snapPixels="8" snapActive="1"
+                 snapShown="1" overlayOpacity="0.330" fixedSize="0" initialWidth="600"
+                 initialHeight="400">
   <BACKGROUND backgroundColour="ff000000"/>
   <SLIDER name="Low Gain" id="1152f571df07d36e" memberName="lowGainKnob"
           virtualName="" explicitFocusOrder="0" pos="0 29 153 175" thumbcol="ffff7f50"
@@ -396,22 +419,22 @@ BEGIN_JUCER_METADATA
           textBoxWidth="80" textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Low Q" id="110c65b3703c29b1" memberName="lowQ" virtualName=""
           explicitFocusOrder="0" pos="18 250 117 39" thumbcol="ffff7f50"
-          rotarysliderfill="ffff7f50" min="0.1" max="20.0" int="0.1" style="LinearHorizontal"
+          rotarysliderfill="ffff7f50" min="0.2" max="12.0" int="0.1" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="Low Mid Q" id="6df622c8b879c98f" memberName="lowMidQ" virtualName=""
           explicitFocusOrder="0" pos="162 250 117 39" thumbcol="ffff7f50"
-          rotarysliderfill="ffff7f50" min="0.1" max="20.0" int="0.1" style="LinearHorizontal"
+          rotarysliderfill="ffff7f50" min="0.2" max="12.0" int="0.1" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="High Mid Q" id="e3a499306740cafb" memberName="highMidQ"
           virtualName="" explicitFocusOrder="0" pos="306 250 117 39" thumbcol="ffff7f50"
-          rotarysliderfill="ffff7f50" min="0.1" max="20.0" int="0.1" style="LinearHorizontal"
+          rotarysliderfill="ffff7f50" min="0.2" max="12.0" int="0.1" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <SLIDER name="High Q" id="383f7020219821f0" memberName="highQ" virtualName=""
           explicitFocusOrder="0" pos="450 250 117 39" thumbcol="ffff7f50"
-          rotarysliderfill="ffff7f50" min="0.1" max="20.0" int="0.1" style="LinearHorizontal"
+          rotarysliderfill="ffff7f50" min="0.2" max="12.0" int="0.1" style="LinearHorizontal"
           textBoxPos="TextBoxBelow" textBoxEditable="1" textBoxWidth="80"
           textBoxHeight="20" skewFactor="1.0" needsCallback="1"/>
   <LABEL name="Low Label" id="c4efba1c1938247e" memberName="lowLabel"

@@ -81,9 +81,9 @@
 								"filename" : "E9.wav",
 								"filekind" : "audiofile",
 								"id" : "u628001045",
-								"loop" : 0,
+								"loop" : 1,
 								"content_state" : 								{
-
+									"loop" : 1
 								}
 
 							}
@@ -396,9 +396,9 @@
 						"subtype" : "Undefined",
 						"embed" : 1,
 						"snapshot" : 						{
-							"pluginname" : "graphical_equaliser.vst3",
-							"plugindisplayname" : "graphical_equaliser",
-							"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphical_equaliser/Builds/MacOSX/build/Debug/graphical_equaliser.vst3",
+							"pluginname" : "graphic_equaliser_2.vst3",
+							"plugindisplayname" : "graphic_equaliser_2",
+							"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphic_equaliser_2/Builds/MacOSX/build/Debug/graphic_equaliser_2.vst3",
 							"pluginsaveduniqueid" : 0,
 							"version" : 1,
 							"isbank" : 0,
@@ -412,15 +412,15 @@
 									"filetype" : "C74Snapshot",
 									"version" : 2,
 									"minorversion" : 0,
-									"name" : "graphical_equaliser",
-									"origin" : "graphical_equaliser.vst3",
+									"name" : "graphic_equaliser_2",
+									"origin" : "graphic_equaliser_2.vst3",
 									"type" : "VST3",
 									"subtype" : "AudioEffect",
-									"embed" : 0,
+									"embed" : 1,
 									"snapshot" : 									{
-										"pluginname" : "graphical_equaliser.vst3",
-										"plugindisplayname" : "graphical_equaliser",
-										"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphical_equaliser/Builds/MacOSX/build/Debug/graphical_equaliser.vst3",
+										"pluginname" : "graphic_equaliser_2.vst3",
+										"plugindisplayname" : "graphic_equaliser_2",
+										"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphic_equaliser_2/Builds/MacOSX/build/Debug/graphic_equaliser_2.vst3",
 										"pluginsaveduniqueid" : 0,
 										"version" : 1,
 										"isbank" : 0,
@@ -429,11 +429,11 @@
 									}
 ,
 									"fileref" : 									{
-										"name" : "graphical_equaliser",
-										"filename" : "graphical_equaliser.maxsnap",
+										"name" : "graphic_equaliser_2",
+										"filename" : "graphic_equaliser_2.maxsnap",
 										"filepath" : "~/Documents/Max 8/Snapshots",
 										"filepos" : -1,
-										"snapshotfileid" : "ce4ac3a17fa17eaaed7b690ffa41ec66"
+										"snapshotfileid" : "a6e71a7072547e343be0d88533b3772d"
 									}
 
 								}
@@ -500,29 +500,15 @@
 			}
 , 			{
 				"box" : 				{
-					"bubble" : 1,
-					"fontname" : "Arial",
-					"fontsize" : 13.0,
-					"id" : "obj-19",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 97.0, 206.0, 241.0, 25.0 ],
-					"presentation" : 1,
-					"presentation_rect" : [ 96.0, 158.452829837799072, 241.0, 25.0 ],
-					"text" : "mute effect and echo input to output"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-34",
 					"maxclass" : "toggle",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 21.0, 184.0, 24.0, 24.0 ]
+					"patching_rect" : [ 21.0, 184.0, 24.0, 24.0 ],
+					"presentation" : 1,
+					"presentation_rect" : [ 97.0, 161.452829837799072, 24.0, 24.0 ]
 				}
 
 			}
@@ -550,7 +536,9 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 21.0, 134.0, 24.0, 24.0 ]
+					"patching_rect" : [ 21.0, 134.0, 24.0, 24.0 ],
+					"presentation" : 1,
+					"presentation_rect" : [ 97.0, 130.452829837799072, 24.0, 24.0 ]
 				}
 
 			}
@@ -567,22 +555,6 @@
 					"presentation" : 1,
 					"presentation_rect" : [ 20.0, 130.452829837799072, 70.0, 23.0 ],
 					"text" : "disable $1"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"bubble" : 1,
-					"fontname" : "Arial",
-					"fontsize" : 13.0,
-					"id" : "obj-92",
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 97.0, 156.0, 162.0, 25.0 ],
-					"presentation" : 1,
-					"presentation_rect" : [ 96.0, 127.452829837799072, 162.0, 25.0 ],
-					"text" : "mute effect processing"
 				}
 
 			}
@@ -870,7 +842,7 @@
 				"implicit" : 1
 			}
 , 			{
-				"name" : "graphical_equaliser.maxsnap",
+				"name" : "graphic_equaliser_2.maxsnap",
 				"bootpath" : "~/Documents/Max 8/Snapshots",
 				"patcherrelativepath" : "../../../Max 8/Snapshots",
 				"type" : "mx@s",

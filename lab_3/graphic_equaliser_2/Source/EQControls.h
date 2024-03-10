@@ -22,7 +22,7 @@
 //[Headers]     -- You can add your own extra header files here --
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
-#include "FilterBank.h"
+#include "EQFilters.h"
 //[/Headers]
 
 
@@ -30,9 +30,7 @@
 //==============================================================================
 /**
                                                                     //[Comments]
-    An auto-generated component, created by the Projucer.
-
-    Describe your class and how it works here!
+    GUI components class for controling the equaliser parameterrs.
                                                                     //[/Comments]
 */
 class EQControls  : public juce::Component,
@@ -40,7 +38,7 @@ class EQControls  : public juce::Component,
 {
 public:
     //==============================================================================
-    EQControls (Graphical_equaliser_2AudioProcessor& processor);
+    EQControls (Graphical_equaliser_2AudioProcessor& p);
     ~EQControls() override;
 
     //==============================================================================
@@ -56,7 +54,6 @@ public:
 private:
     //[UserVariables]   -- You can add your own custom variables in this section.
     Graphical_equaliser_2AudioProcessor& processor;
-//    Equaliser& eq;
     //[/UserVariables]
 
     //==============================================================================
