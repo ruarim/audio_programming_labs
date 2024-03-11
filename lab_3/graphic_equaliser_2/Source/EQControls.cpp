@@ -323,7 +323,6 @@ void EQControls::sliderValueChanged (juce::Slider* sliderThatWasMoved)
     float sliderValue = sliderThatWasMoved->getValue();   // get the value from the slider that was moved
     //[/UsersliderValueChanged_Pre]
 
-    // apply the new value to the appropriate eq filter variable
     if (sliderThatWasMoved == lowGainKnob.get())
     {
         //[UserSliderCode_lowGainKnob] -- add your slider handling code here..
