@@ -22,7 +22,7 @@ Graphical_equaliser_2AudioProcessor::Graphical_equaliser_2AudioProcessor()
                        )
 #endif
 {
-    // create equaliser
+    // create equaliser filters
     eq = new EQFilters();
 }
 

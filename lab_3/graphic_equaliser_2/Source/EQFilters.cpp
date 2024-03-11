@@ -50,19 +50,19 @@ void EQFilters::process(float* channelData, int channel, int numSamples)
 void EQFilters::makeCoefficients()
 {
     // make IIR coefficients
-    float lowGain = pow(10, lowGainDb / 20.0);
+    float lowGain = dBToLinear(lowGainDb); // convert dB gain to linear gain
     auto lowCoefficients = juce::IIRCoefficients::makeLowShelf(sampleRate, lowFreq, lowQ, lowGain);
     
-    float lowMidGain = pow(10, lowMidGainDb / 20.0);
+    float lowMidGain = dBToLinear(lowMidGainDb);
     auto lowMidCoefficients = juce::IIRCoefficients::makePeakFilter(sampleRate, lowMidFreq, lowMidQ, lowMidGain);
     
-    float highMidGain = pow(10, highMidGainDb / 20.0);
+    float highMidGain = dBToLinear(highMidGainDb);
     auto highMidCoefficients = juce::IIRCoefficients::makePeakFilter(sampleRate, highMidFreq, highMidQ, highMidGain);
     
-    float highGain = pow(10, highGainDb / 20.0);
+    float highGain = dBToLinear(highGainDb);
     auto highCoefficients = juce::IIRCoefficients::makeHighShelf(sampleRate, highFreq, highQ, highGain);
     
-    // set coefs to each filter
+    // set coefs for each filter
     for (int i = 0; i < lowFilters.size(); i++) lowFilters[i]->setCoefficients(lowCoefficients);
     for (int i = 0; i < lowMidFilters.size(); i++) lowMidFilters[i]->setCoefficients(lowMidCoefficients);
     for (int i = 0; i < highMidFilters.size(); i++) highMidFilters[i]->setCoefficients(highMidCoefficients);
@@ -76,4 +76,9 @@ void EQFilters::processSerial(float* channelData, int channel, int numSamples)
     highMidFilters[channel]->processSamples(channelData, numSamples);
     highFilters[channel]->processSamples(channelData, numSamples);
 
+}
+
+float EQFilters::dBToLinear(float dbGain)
+{
+    return pow(10, dbGain / 20.0);
 }

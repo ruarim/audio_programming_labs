@@ -22,22 +22,22 @@ public:
     void makeCoefficients();
     
     // expose eq params
-    float lowGainDb = 0.0f;
-    float lowQ = 0.1f;
+    float lowGainDb = 0.0f; // initalise to 0 dB gain
+    float lowQ = 0.2f; // q value must be initalised to > 0 - 0.2 is chosen here
      
     float lowMidGainDb = 0.0f;
-    float lowMidQ = 0.1f;
+    float lowMidQ = 0.2f;
     
     float highMidGainDb = 0.0f;
-    float highMidQ = 0.1f;
+    float highMidQ = 0.2f;
      
     float highGainDb = 0.0f;
-    float highQ = 0.1;
+    float highQ = 0.2;
     
 private:
     float sampleRate = 0;
     
-    // cetnter frequncies based on ISO 266 - https://www.iso.org/standard/1350.html
+    // center frequncies based on ISO 266 - https://www.iso.org/standard/1350.html
     // low shelf
     juce::OwnedArray<juce::IIRFilter> lowFilters;
     const float lowFreq = 80.0f;
@@ -56,4 +56,5 @@ private:
 
     
     void processSerial(float* channelData, int channel, int numSamples);
+    float dBToLinear(float dbGain);
 };

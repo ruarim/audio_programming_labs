@@ -53,9 +53,17 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
-    
+
 private:
     Equaliser* eq;
+    
+    juce::AudioParameterFloat* lowGainParam;
+    juce::AudioParameterFloat* lowQParam;
+    juce::AudioParameterFloat* midGainParam;
+    juce::AudioParameterFloat* midQParam;
+    juce::AudioParameterFloat* highGainParam;
+    juce::AudioParameterFloat* highQParam;
+    juce::AudioParameterChoice* processingModeParam;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Graphical_equaliserAudioProcessor)

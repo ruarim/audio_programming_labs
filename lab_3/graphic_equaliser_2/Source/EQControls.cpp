@@ -319,10 +319,11 @@ void EQControls::resized()
 void EQControls::sliderValueChanged (juce::Slider* sliderThatWasMoved)
 {
     //[UsersliderValueChanged_Pre]
-    EQFilters* eq = processor.eq;
-    float sliderValue = sliderThatWasMoved->getValue();
+    EQFilters* eq = processor.eq;   // get a pointer to EQFilter object from the processor reference
+    float sliderValue = sliderThatWasMoved->getValue();   // get the value from the slider that was moved
     //[/UsersliderValueChanged_Pre]
 
+    // apply the new value to the appropriate eq filter variable
     if (sliderThatWasMoved == lowGainKnob.get())
     {
         //[UserSliderCode_lowGainKnob] -- add your slider handling code here..
