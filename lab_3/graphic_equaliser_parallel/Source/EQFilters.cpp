@@ -28,23 +28,23 @@ void EQFilters::prepare(const juce::dsp::ProcessSpec &spec)
     
     // setup the gains
     for (auto& p : gains)
-            p.prepare (spec);
-    
+        p.prepare (spec);
 }
 
 void EQFilters::process(const juce::dsp::ProcessContextReplacing<float>& context)
 {
-    // get sample count
+    // get block sample count
     const auto numSamples = context.getInputBlock().getNumSamples();
     
-    //
+    // create array for sub blocks of input buffer
     std::array<juce::dsp::AudioBlock<float>, numTempBuffers> processingTempBlocks;
     
     for(size_t i = 0; i < numTempBuffers; ++i)
     {
+        // only get the blocked needed for processing - since the block may be < max block size.
         processingTempBlocks[i] = tempBlocks[i].getSubBlock (0, numSamples);
         
-        // apply filtering an gain to temp buffers
+        // apply filtering to temp buffers
         juce::dsp::ProcessContextNonReplacing<float> nonReplacingContext(context.getInputBlock(), processingTempBlocks[i]);
         filters[i].process(nonReplacingContext);
     
@@ -55,7 +55,7 @@ void EQFilters::process(const juce::dsp::ProcessContextReplacing<float>& context
     
     // the last filter can be processed in place
     filters.back().process (context);
-    gains.back().process(context);
+    gains  .back().process(context);
     
     // add the temp buffers to the output buffer
     for (auto& tempBlock : processingTempBlocks)
@@ -64,43 +64,36 @@ void EQFilters::process(const juce::dsp::ProcessContextReplacing<float>& context
 
 void EQFilters::makeCoefficients()
 {
-    // define coefficients type to simplify the code and reduce typing
-    // using the ArrayCoefficients type for audio thread-safety
-    using IIRCoefficients = juce::dsp::IIR::ArrayCoefficients<float>;
+    // define coefficients type to simplify the code
+    using IIRCoefficients = juce::dsp::IIR::ArrayCoefficients<float>;     // using the ArrayCoefficients type for audio thread-safety
     
     // make IIR coefficients
-    auto lowCoefficients = IIRCoefficients::makeLowPass(sampleRate, lowPassFreq, lowQ);
+    auto lowCoefficients     = IIRCoefficients::makeLowPass(sampleRate, lowPassFreq, lowQ);
         
-    auto lowMidCoefficients = IIRCoefficients::makeBandPass(sampleRate, lowMidFreq, lowMidQ);
+    auto lowMidCoefficients  = IIRCoefficients::makeBandPass(sampleRate, lowMidBandFreq, lowMidQ);
     
-    auto highMidCoefficients = IIRCoefficients::makeBandPass(sampleRate, highMidFreq, highMidQ);
+    auto highMidCoefficients = IIRCoefficients::makeBandPass(sampleRate, highMidBandFreq, highMidQ);
     
-    auto highCoefficients = IIRCoefficients::makeHighPass(sampleRate, highPassFreq, highQ);
+    auto highCoefficients    = IIRCoefficients::makeHighPass(sampleRate, highPassFreq, highQ);
     
     // apply the coefficients to each filters state.
-    StereoIIR& lowPass = filters[lowPassIndex];
-    *lowPass.state = lowCoefficients;
+    StereoIIR& lowPass     = filters[lowPassIndex];
+    *lowPass.state         = lowCoefficients;
     
-    StereoIIR& lowMidBand = filters[lowMidBandIndex];
-    *lowMidBand.state = lowMidCoefficients;
+    StereoIIR& lowMidBand  = filters[lowMidBandIndex];
+    *lowMidBand.state      = lowMidCoefficients;
     
     StereoIIR& highMidBand = filters[highMidBandIndex];
-    *highMidBand.state = highMidCoefficients;
+    *highMidBand.state     = highMidCoefficients;
 
-    StereoIIR& highPass = filters[highPassIndex];
-    *highPass.state = highCoefficients;
+    StereoIIR& highPass    = filters[highPassIndex];
+    *highPass.state        = highCoefficients;
 }
 
 void EQFilters::setFilterGains()
 {
-    // use loop instead
-    gains[lowPassIndex].setGainDecibels(lowGainDb);
-    gains[lowMidBandIndex].setGainDecibels(lowMidGainDb);
+    gains[lowPassIndex]    .setGainDecibels(lowGainDb);
+    gains[lowMidBandIndex] .setGainDecibels(lowMidGainDb);
     gains[highMidBandIndex].setGainDecibels(highMidGainDb);
-    gains[highPassIndex].setGainDecibels(highGainDb);
-}
-
-float EQFilters::dBToLinear(float dbGain)
-{
-    return pow(10, dbGain / 20.0);
+    gains[highPassIndex]   .setGainDecibels(highGainDb);
 }

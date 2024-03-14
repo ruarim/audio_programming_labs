@@ -11,7 +11,7 @@
 #pragma once
 #include <JuceHeader.h>
 
-class EQFilters // should this class inherit from juce::dsp::ProcessorBase then call in ProcessorChain
+class EQFilters
 {
 public:
     EQFilters();
@@ -24,34 +24,34 @@ public:
     
     // expose eq params - change to lowPassGainDb
     float lowGainDb = 0.0f; // initalise to 0 dB gain
-    float lowQ = 0.2f; // initalise q to 0.2 value must be initalised to > 0.0
+    float lowQ      = 0.2f; // initalise q to 0.2 value must be initalised to > 0.0
      
     float lowMidGainDb = 0.0f;
-    float lowMidQ = 0.2f;
+    float lowMidQ      = 0.2f;
     
     float highMidGainDb = 0.0f;
-    float highMidQ = 0.2f;
+    float highMidQ      = 0.2f;
      
     float highGainDb = 0.0f;
-    float highQ = 0.2;
+    float highQ      = 0.2;
     
 private:
     float sampleRate = 0.0f;
     
-    // center frequncies based on ISO 266 - https://www.iso.org/standard/1350.html
+    // center frequncies based on ISO 266 Nominal Center Frequency range - https://en.wikipedia.org/wiki/Preferred_number#Audio_frequencies
     // low cut
-    const float lowPassFreq = 80.0f;
+    static constexpr float lowPassFreq      = 80.0f;
     
-    // low mid peaking
-    const float lowMidFreq = 315.0f;
+    // low mid band
+    static constexpr float lowMidBandFreq   = 315.0f;
     
-    // high mid peaking
-    const float highMidFreq = 1250.0f;
+    // high mid band
+    static constexpr float highMidBandFreq  = 1250.0f;
     
     // high cut
-    const float highPassFreq = 5000.0f;
+    static constexpr float highPassFreq     = 5000.0f;
     
-    // store index - use loops instead see below?
+    // store index
     enum {
         highPassIndex,
         lowMidBandIndex,
@@ -59,25 +59,17 @@ private:
         lowPassIndex,
     };
     
-    static const int numFilters = 4; // can come from class template?
+    static const int numFilters = 4;
     
-    // currently not used
-    // const float eqFreqs[numFilters] = { 80.0f, 315.0f, 1250.0f, 5000.0f };
-    
-    // type aliases to simplify code
-    // define IIR Filter and its associated coefficients type
-    using Filter = juce::dsp::IIR::Filter<float>;
+    // define IIR Filter and its associated coefficients type aliases to simplify code
+    using Filter       = juce::dsp::IIR::Filter<float>;
     using Coefficients = juce::dsp::IIR::Coefficients <float>;
+    // define stereo IIR filter and Gain types
+    using StereoIIR    = juce::dsp::ProcessorDuplicator<Filter, Coefficients>;
+    using Gain         = juce::dsp::Gain<float>;
     
-    // define stereo IIR filter type
-    using StereoIIR = juce::dsp::ProcessorDuplicator<Filter, Coefficients>;
-    
-    // define Gain type
-    using Gain = juce::dsp::Gain<float>;
-    
-    // array of filters - one for each eq band
+    // filters and gains - one for each eq band
     std::array<StereoIIR, numFilters> filters;
-    
     std::array<Gain,      numFilters> gains;
         
     // temp buffers for non replacing context
@@ -86,6 +78,4 @@ private:
     // define temp buffers
     std::array<juce::HeapBlock<char>,        numTempBuffers> tempBuffersMemory;
     std::array<juce::dsp::AudioBlock<float>, numTempBuffers> tempBlocks;
-    
-    float dBToLinear(float dbGain);
 };
