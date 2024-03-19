@@ -54,7 +54,7 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
-    std::shared_ptr<EQFilters> eq;
+    std::shared_ptr<EQFilters> eq; // shared pointer to give editor write access.
 
 private:
     //==============================================================================

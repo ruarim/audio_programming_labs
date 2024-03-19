@@ -22,7 +22,7 @@ Graphical_equaliser_4AudioProcessor::Graphical_equaliser_4AudioProcessor()
                        )
 #endif
 {
-    // create equaliser filters - this is shared because the editor controls the parameters.
+    // create equaliser filters shared pointer
     eq = std::make_shared<EQFilters>();
 }
 
@@ -95,11 +95,13 @@ void Graphical_equaliser_4AudioProcessor::changeProgramName (int index, const ju
 //==============================================================================
 void Graphical_equaliser_4AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    // create processing spec
     juce::dsp::ProcessSpec spec;
     spec.maximumBlockSize = samplesPerBlock;
     spec.sampleRate = sampleRate;
     spec.numChannels = getTotalNumOutputChannels();
     
+    // pass the spec to the equaliser
     eq->prepare(spec);
 }
 
@@ -140,25 +142,18 @@ void Graphical_equaliser_4AudioProcessor::processBlock (juce::AudioBuffer<float>
     juce::ScopedNoDenormals noDenormals;
     auto numInputChannels  = getTotalNumInputChannels();
     auto numOutputChannels = getTotalNumOutputChannels();
-
     for (auto i = numInputChannels; i < numOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    // set up eq fitlers
     eq->makeCoefficients();
     eq->setFilterGains();
-
-    // white noise for testing standalone - @dev REMOVE IN FINAL
-    for (int channel = 0; channel < numInputChannels; ++channel)
-    {
-        int numSamples = buffer.getNumSamples();
-        auto* channelData = buffer.getWritePointer(channel);
-        
-        for (int i = 0; i < numSamples; ++i) channelData[i] = 2.0f * rand() / (float)RAND_MAX - 1.0f;
-    }
     
     // create processing context
     juce::dsp::AudioBlock <float> block (buffer);
     juce::dsp::ProcessContextReplacing<float> context (block);
+    
+    // apply equaliser to the processing context
     eq->process(context);
 }
 

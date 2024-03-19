@@ -18,7 +18,7 @@ public:
     ~EQFilters();
     
     void prepare(const juce::dsp::ProcessSpec &spec);
-    void process(juce::dsp::AudioBlock <float> block);
+    void process(const juce::dsp::ProcessContextReplacing<float>& context);
     void makeCoefficients();
     
     // expose eq params
@@ -58,11 +58,12 @@ private:
         highShelfIndex,
     };
     
-    // define an IIR Filter and its associated coefficients
-    using Filter = juce::dsp::IIR::Filter<float>;
-    using Coefficients = juce::dsp::IIR::Coefficients <float>;
+    // creating type alises to simplify the code.
+    // types alises for an IIR Filter and its associated coefficients
+    using Filter = juce::dsp::IIR::Filter<float>; // the maths
+    using Coefficients = juce::dsp::IIR::Coefficients <float>; // the state
     
-    // define a stereo IIR filter
+    // define a stereo IIR filter type alias
     using StereoIIR = juce::dsp::ProcessorDuplicator<Filter, Coefficients>;
     
     // create a processor chain for the filters - one for each of the eq bands

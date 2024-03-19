@@ -40,6 +40,41 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-46",
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 659.0, 215.0, 150.0, 20.0 ],
+					"presentation" : 1,
+					"presentation_rect" : [ 290.0, 171.952829837799072, 55.0, 20.0 ],
+					"text" : "Presets"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-19",
+					"maxclass" : "preset",
+					"numinlets" : 1,
+					"numoutlets" : 5,
+					"outlettype" : [ "preset", "int", "preset", "int", "" ],
+					"patching_rect" : [ 599.0, 271.0, 100.0, 40.0 ],
+					"presentation" : 1,
+					"presentation_rect" : [ 290.0, 192.952829837799072, 100.0, 40.0 ],
+					"preset_data" : [ 						{
+							"number" : 1,
+							"data" : [ 5, "obj-38", "toggle", "int", 0, 5, "obj-34", "toggle", "int", 0, 5, "obj-4", "live.gain~", "float", -6.0, 5, "obj-14", "attrui", "attr", "sono", 5, "obj-14", "attrui", "int", 0, 5, "obj-21", "attrui", "attr", "interval", 5, "obj-21", "attrui", "int", 200, 5, "obj-17", "attrui", "attr", "logamp", 5, "obj-17", "attrui", "int", 1, 5, "obj-8", "attrui", "attr", "domain", 6, "obj-8", "attrui", "list", 0.0, 24000.0, 5, "obj-25", "attrui", "attr", "range", 6, "obj-25", "attrui", "list", 0.0, 1.0, 5, "obj-32", "umenu", "int", 0, 5, "obj-1", "playlist~", "preset_count", 4, 7, "obj-1", "playlist~", "preset_clipstate", 1, "filekind", "audiofile", 7, "obj-1", "playlist~", "preset_clipstate", 1, "absolutepath", "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/D15.wav", 7, "obj-1", "playlist~", "preset_clipstate", 1, "filename", "D15.wav", 7, "obj-1", "playlist~", "preset_clipstate", 1, "loop", 1, 8, "obj-1", "playlist~", "preset_clipstate", 1, "selection", -1.0, -1.0, 7, "obj-1", "playlist~", "preset_clipstate", 1, "id", "u005001023", 7, "obj-1", "playlist~", "preset_content", 1, "loop", 1, 7, "obj-1", "playlist~", "preset_clipstate", 2, "filekind", "audiofile", 7, "obj-1", "playlist~", "preset_clipstate", 2, "absolutepath", "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E4.wav", 7, "obj-1", "playlist~", "preset_clipstate", 2, "filename", "E4.wav", 7, "obj-1", "playlist~", "preset_clipstate", 2, "loop", 1, 8, "obj-1", "playlist~", "preset_clipstate", 2, "selection", -1.0, -1.0, 7, "obj-1", "playlist~", "preset_clipstate", 2, "id", "u603001031", 7, "obj-1", "playlist~", "preset_content", 2, "loop", 1, 7, "obj-1", "playlist~", "preset_clipstate", 3, "filekind", "audiofile", 7, "obj-1", "playlist~", "preset_clipstate", 3, "absolutepath", "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E7.wav", 7, "obj-1", "playlist~", "preset_clipstate", 3, "filename", "E7.wav", 7, "obj-1", "playlist~", "preset_clipstate", 3, "loop", 0, 8, "obj-1", "playlist~", "preset_clipstate", 3, "selection", -1.0, -1.0, 7, "obj-1", "playlist~", "preset_clipstate", 3, "id", "u400001038", 7, "obj-1", "playlist~", "preset_clipstate", 4, "filekind", "audiofile", 7, "obj-1", "playlist~", "preset_clipstate", 4, "absolutepath", "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E9.wav", 7, "obj-1", "playlist~", "preset_clipstate", 4, "filename", "E9.wav", 7, "obj-1", "playlist~", "preset_clipstate", 4, "loop", 1, 8, "obj-1", "playlist~", "preset_clipstate", 4, "selection", -1.0, -1.0, 7, "obj-1", "playlist~", "preset_clipstate", 4, "id", "u628001045", 7, "obj-1", "playlist~", "preset_content", 4, "loop", 1, 4, "obj-1", "playlist~", "preset_execute", 5, "obj-13", "toggle", "int", 1, 5, "obj-27", "toggle", "int", 0, 5, "obj-30", "toggle", "int", 0, 5, "obj-37", "number", "int", 440 ]
+						}
+, 						{
+							"number" : 2,
+							"data" : [ 5, "obj-38", "toggle", "int", 0, 5, "obj-34", "toggle", "int", 0, 5, "obj-4", "live.gain~", "float", -6.0, 5, "obj-14", "attrui", "attr", "sono", 5, "obj-14", "attrui", "int", 1, 5, "obj-21", "attrui", "attr", "interval", 5, "obj-21", "attrui", "int", 20, 5, "obj-17", "attrui", "attr", "logamp", 5, "obj-17", "attrui", "int", 1, 5, "obj-8", "attrui", "attr", "domain", 6, "obj-8", "attrui", "list", 0.0, 24000.0, 5, "obj-25", "attrui", "attr", "range", 6, "obj-25", "attrui", "list", 0.0, 1.0, 5, "obj-32", "umenu", "int", 0, 5, "obj-1", "playlist~", "preset_count", 4, 7, "obj-1", "playlist~", "preset_clipstate", 1, "filekind", "audiofile", 7, "obj-1", "playlist~", "preset_clipstate", 1, "absolutepath", "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/D15.wav", 7, "obj-1", "playlist~", "preset_clipstate", 1, "filename", "D15.wav", 7, "obj-1", "playlist~", "preset_clipstate", 1, "loop", 1, 8, "obj-1", "playlist~", "preset_clipstate", 1, "selection", -1.0, -1.0, 7, "obj-1", "playlist~", "preset_clipstate", 1, "id", "u005001023", 7, "obj-1", "playlist~", "preset_content", 1, "loop", 1, 7, "obj-1", "playlist~", "preset_clipstate", 2, "filekind", "audiofile", 7, "obj-1", "playlist~", "preset_clipstate", 2, "absolutepath", "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E4.wav", 7, "obj-1", "playlist~", "preset_clipstate", 2, "filename", "E4.wav", 7, "obj-1", "playlist~", "preset_clipstate", 2, "loop", 1, 8, "obj-1", "playlist~", "preset_clipstate", 2, "selection", -1.0, -1.0, 7, "obj-1", "playlist~", "preset_clipstate", 2, "id", "u603001031", 7, "obj-1", "playlist~", "preset_content", 2, "loop", 1, 7, "obj-1", "playlist~", "preset_clipstate", 3, "filekind", "audiofile", 7, "obj-1", "playlist~", "preset_clipstate", 3, "absolutepath", "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E7.wav", 7, "obj-1", "playlist~", "preset_clipstate", 3, "filename", "E7.wav", 7, "obj-1", "playlist~", "preset_clipstate", 3, "loop", 0, 8, "obj-1", "playlist~", "preset_clipstate", 3, "selection", -1.0, -1.0, 7, "obj-1", "playlist~", "preset_clipstate", 3, "id", "u400001038", 7, "obj-1", "playlist~", "preset_clipstate", 4, "filekind", "audiofile", 7, "obj-1", "playlist~", "preset_clipstate", 4, "absolutepath", "/Users/ruari/Documents/SAMPLES/sounds/OPN_Replica_SP555_CF_Samples/E9.wav", 7, "obj-1", "playlist~", "preset_clipstate", 4, "filename", "E9.wav", 7, "obj-1", "playlist~", "preset_clipstate", 4, "loop", 1, 8, "obj-1", "playlist~", "preset_clipstate", 4, "selection", -1.0, -1.0, 7, "obj-1", "playlist~", "preset_clipstate", 4, "id", "u628001045", 7, "obj-1", "playlist~", "preset_content", 4, "loop", 1, 4, "obj-1", "playlist~", "preset_execute", 5, "obj-13", "toggle", "int", 1, 5, "obj-27", "toggle", "int", 0, 5, "obj-30", "toggle", "int", 0, 5, "obj-37", "number", "int", 440 ]
+						}
+ ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-61",
 					"maxclass" : "comment",
 					"numinlets" : 1,
@@ -612,9 +647,9 @@
 						"subtype" : "Undefined",
 						"embed" : 1,
 						"snapshot" : 						{
-							"pluginname" : "graphic_equaliser_2.vst3",
-							"plugindisplayname" : "graphic_equaliser_2",
-							"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphic_equaliser_2/Builds/MacOSX/build/Debug/graphic_equaliser_2.vst3",
+							"pluginname" : "graphic_equaliser_4.vst3",
+							"plugindisplayname" : "graphic_equaliser_4",
+							"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphic_equaliser_parallel/Builds/MacOSX/build/Debug/graphic_equaliser_4.vst3",
 							"pluginsaveduniqueid" : 0,
 							"version" : 1,
 							"isbank" : 0,
@@ -628,15 +663,15 @@
 									"filetype" : "C74Snapshot",
 									"version" : 2,
 									"minorversion" : 0,
-									"name" : "graphic_equaliser_2",
-									"origin" : "graphic_equaliser_2.vst3",
+									"name" : "graphic_equaliser_4",
+									"origin" : "graphic_equaliser_4.vst3",
 									"type" : "VST3",
 									"subtype" : "AudioEffect",
-									"embed" : 0,
+									"embed" : 1,
 									"snapshot" : 									{
-										"pluginname" : "graphic_equaliser_2.vst3",
-										"plugindisplayname" : "graphic_equaliser_2",
-										"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphic_equaliser_2/Builds/MacOSX/build/Debug/graphic_equaliser_2.vst3",
+										"pluginname" : "graphic_equaliser_4.vst3",
+										"plugindisplayname" : "graphic_equaliser_4",
+										"pluginsavedname" : "~/Documents/SoundandMusicMsc/audio_programming/audio_programming_labs/lab_3/graphic_equaliser_parallel/Builds/MacOSX/build/Debug/graphic_equaliser_4.vst3",
 										"pluginsaveduniqueid" : 0,
 										"version" : 1,
 										"isbank" : 0,
@@ -645,11 +680,11 @@
 									}
 ,
 									"fileref" : 									{
-										"name" : "graphic_equaliser_2",
-										"filename" : "graphic_equaliser_2.maxsnap",
+										"name" : "graphic_equaliser_4",
+										"filename" : "graphic_equaliser_4.maxsnap",
 										"filepath" : "~/Documents/Max 8/Snapshots",
 										"filepos" : -1,
-										"snapshotfileid" : "a6e71a7072547e343be0d88533b3772d"
+										"snapshotfileid" : "de2d05555cbc996beca0e7b9777c2fe5"
 									}
 
 								}
@@ -1158,7 +1193,7 @@
 				"implicit" : 1
 			}
 , 			{
-				"name" : "graphic_equaliser_2.maxsnap",
+				"name" : "graphic_equaliser_4.maxsnap",
 				"bootpath" : "~/Documents/Max 8/Snapshots",
 				"patcherrelativepath" : "../../../Max 8/Snapshots",
 				"type" : "mx@s",

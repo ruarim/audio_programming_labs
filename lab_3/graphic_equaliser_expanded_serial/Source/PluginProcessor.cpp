@@ -95,11 +95,13 @@ void Graphical_equaliser_3AudioProcessor::changeProgramName (int index, const ju
 //==============================================================================
 void Graphical_equaliser_3AudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    // create processing spec
     juce::dsp::ProcessSpec spec;
     spec.maximumBlockSize = samplesPerBlock;
     spec.sampleRate = sampleRate;
     spec.numChannels = getTotalNumOutputChannels();
     
+    // pass the spec to the equaliser
     eq->prepare(spec);
 }
 
@@ -143,24 +145,16 @@ void Graphical_equaliser_3AudioProcessor::processBlock (juce::AudioBuffer<float>
 
     for (auto i = numInputChannels; i < numOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
-
-    // mid-side equalisation
-    // add mono freq control?
-    //      - low shelf filter is mono?
-
-    eq->makeCoefficients();
-
-    // white noise for testing standalone
-    for (int channel = 0; channel < numInputChannels; ++channel)
-    {
-        int numSamples = buffer.getNumSamples();
-        auto* channelData = buffer.getWritePointer(channel);
-        
-        for (int i = 0; i < numSamples; ++i) channelData[i] = 2.0f * rand() / (float)RAND_MAX - 1.0f;
-    }
     
+    // apply the coefficients for each filter
+    eq->makeCoefficients();
+    
+    // create processing context
     juce::dsp::AudioBlock <float> block (buffer);
-    eq->process(block);
+    juce::dsp::ProcessContextReplacing<float> context (block);
+    
+    // apply equaliser to the processing context
+    eq->process(context);
 }
 
 //==============================================================================

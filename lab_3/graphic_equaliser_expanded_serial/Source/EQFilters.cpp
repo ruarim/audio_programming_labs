@@ -24,13 +24,9 @@ void EQFilters::prepare(const juce::dsp::ProcessSpec &spec)
     processorChain.prepare(spec);
 }
 
-void EQFilters::process(juce::dsp::AudioBlock <float> block)
+void EQFilters::process(const juce::dsp::ProcessContextReplacing<float>& context)
 {
-    // serial for high low shelf
-    juce::dsp::ProcessContextReplacing<float> context (block);
     processorChain.process(context);
-    
-    // parallel for low and high cut
 }
 
 void EQFilters::makeCoefficients()
@@ -66,17 +62,6 @@ void EQFilters::makeCoefficients()
     *highShelf.state = highCoefficients;
 
 }
-
-
-//void EQFilters::processSerial(juce::dsp::AudioBlock <float> block)
-//{
-//
-//}
-
-//void EQFilters::processParallel(juce::dsp::AudioBlock <float> block)
-//{
-//
-//}
 
 float EQFilters::dBToLinear(float dbGain)
 {
