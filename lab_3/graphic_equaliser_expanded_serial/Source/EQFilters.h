@@ -58,8 +58,8 @@ private:
         highShelfIndex,
     };
     
-    // creating type alises to simplify the code.
-    // types alises for an IIR Filter and its associated coefficients
+    // defining type alises to simplify the code.
+    // type alises for an IIR Filter and its associated coefficients
     using Filter = juce::dsp::IIR::Filter<float>; // the maths
     using Coefficients = juce::dsp::IIR::Coefficients <float>; // the state
     
@@ -69,6 +69,5 @@ private:
     // create a processor chain for the filters - one for each of the eq bands
     juce::dsp::ProcessorChain<StereoIIR, StereoIIR, StereoIIR, StereoIIR> processorChain;
     
-    void processSerial(float* channelData, int channel, int numSamples);
     float dBToLinear(float dbGain);
 };

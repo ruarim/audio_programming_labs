@@ -1,4 +1,4 @@
-/*
+    /*
   ==============================================================================
 
     EQFilters.cpp
@@ -75,7 +75,6 @@ void EQFilters::processSerial(float* channelData, int channel, int numSamples)
     lowMidFilters[channel]->processSamples(channelData, numSamples);
     highMidFilters[channel]->processSamples(channelData, numSamples);
     highFilters[channel]->processSamples(channelData, numSamples);
-
 }
 
 float EQFilters::dBToLinear(float dbGain)

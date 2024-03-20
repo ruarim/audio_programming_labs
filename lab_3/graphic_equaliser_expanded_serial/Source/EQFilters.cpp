@@ -21,6 +21,7 @@ void EQFilters::prepare(const juce::dsp::ProcessSpec &spec)
     // make sure the processor chain is cleared.
     processorChain.reset();
     
+    // prepare the chain for processing based on the provided spec
     processorChain.prepare(spec);
 }
 

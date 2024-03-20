@@ -39,9 +39,10 @@ void EQFilters::process(const juce::dsp::ProcessContextReplacing<float>& context
     // create array for sub blocks of input buffer
     std::array<juce::dsp::AudioBlock<float>, numTempBuffers> processingTempBlocks;
     
+    // parallel process each filter seperatly
     for(size_t i = 0; i < numTempBuffers; ++i)
     {
-        // only get the blocked needed for processing - since the block may be < max block size.
+        // only get the block needed for processing - since the block may be < max block size.
         processingTempBlocks[i] = tempBlocks[i].getSubBlock (0, numSamples);
         
         // apply filtering to temp buffers
@@ -65,7 +66,7 @@ void EQFilters::process(const juce::dsp::ProcessContextReplacing<float>& context
 void EQFilters::makeCoefficients()
 {
     // define coefficients type to simplify the code
-    using IIRCoefficients = juce::dsp::IIR::ArrayCoefficients<float>;     // using the ArrayCoefficients type for audio thread-safety
+    using IIRCoefficients = juce::dsp::IIR::ArrayCoefficients<float>; // using the ArrayCoefficients type for audio thread-safety
     
     // make IIR coefficients
     auto lowCoefficients     = IIRCoefficients::makeLowPass(sampleRate, lowPassFreq, lowQ);

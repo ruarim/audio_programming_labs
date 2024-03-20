@@ -141,11 +141,6 @@ void Graphical_equaliser_2AudioProcessor::processBlock (juce::AudioBuffer<float>
     for (auto i = numInputChannels; i < numOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-
-    // mid-side equalisation
-    // add mono freq control?
-    //      - low shelf filter is mono?
-
     eq->makeCoefficients();
 
     for (int channel = 0; channel < numInputChannels; ++channel)
@@ -153,8 +148,8 @@ void Graphical_equaliser_2AudioProcessor::processBlock (juce::AudioBuffer<float>
         int numSamples = buffer.getNumSamples();
         auto* channelData = buffer.getWritePointer(channel);
         
-//        for (int i = 0; i < numSamples; ++i) channelData[i] = 2.0f * rand() / (float)RAND_MAX - 1.0f; //white noise for testing
-
+        for (int i = 0; i < numSamples; ++i) channelData[i] = 2.0f * rand() / (float)RAND_MAX - 1.0f; //white noise for testing
+        
         eq->process(channelData, channel, numSamples);
     }
 }

@@ -40,16 +40,16 @@ private:
     
     // center frequncies based on ISO 266 Nominal Center Frequency range - https://en.wikipedia.org/wiki/Preferred_number#Audio_frequencies
     // low cut
-    static constexpr float lowPassFreq      = 80.0f;
+    const float lowPassFreq      = 80.0f;
     
     // low mid band
-    static constexpr float lowMidBandFreq   = 315.0f;
+    const float lowMidBandFreq   = 315.0f;
     
     // high mid band
-    static constexpr float highMidBandFreq  = 1250.0f;
+    const float highMidBandFreq  = 1250.0f;
     
     // high cut
-    static constexpr float highPassFreq     = 5000.0f;
+    const float highPassFreq     = 5000.0f;
     
     // store index
     enum {
@@ -61,9 +61,10 @@ private:
     
     static const int numFilters = 4;
     
-    // define IIR Filter and its associated coefficients type aliases to simplify code
+    // define IIR Filter and its associated coefficients as type aliases to simplify code
     using Filter       = juce::dsp::IIR::Filter<float>;
     using Coefficients = juce::dsp::IIR::Coefficients <float>;
+    
     // define stereo IIR filter and Gain types
     using StereoIIR    = juce::dsp::ProcessorDuplicator<Filter, Coefficients>;
     using Gain         = juce::dsp::Gain<float>;
